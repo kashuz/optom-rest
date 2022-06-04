@@ -5,15 +5,6 @@ class APIRoutes
     public static final function getRoutes(): array
     {
         return [
-            'module-binshopsrest-login' => [
-                'rule' => 'rest/login',
-                'keywords' => [],
-                'controller' => 'login',
-                'params' => [
-                    'fc' => 'module',
-                    'module' => 'binshopsrest'
-                ]
-            ],
             'module-binshopsrest-register' => [
                 'rule' => 'rest/register',
                 'keywords' => [],
