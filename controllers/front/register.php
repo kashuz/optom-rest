@@ -73,12 +73,13 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             }
         } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
             $customer = new Customer($customerId);
-            $customer->sendOtpByPhone();
+            $resultMessage = null;
+            $customer->sendOtpByPhone($resultMessage);
 
             $messageCode = 200;
             $psdata = array(
                 'is_otp_sent' => true,
-                'message' => $this->trans('Confirmation code has been sent to your phone.', [], 'Modules.Binshopsrest.Auth'),
+                'message' => $resultMessage,
                 'session_data' => (int)$this->context->cart->id
             );
         } elseif (empty($firstName) || empty($lastName)) {
@@ -100,10 +101,13 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
 
                 $status = $cp->save($customer, KashUtils::generateRandomString());
 
+                $resultMessage = null;
+                $customer->sendOtpByPhone($resultMessage);
+
                 $messageCode = 200;
                 $psdata = array(
                     'registered' => $status,
-                    'message' => $this->trans('User registered successfully', [], 'Modules.Binshopsrest.Auth'),
+                    'message' => $resultMessage,
                     'session_data' => (int)$this->context->cart->id
                 );
             } catch (Exception $exception) {
