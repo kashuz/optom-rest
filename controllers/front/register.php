@@ -8,6 +8,7 @@
  */
 
 require_once dirname(__FILE__) . '/../AbstractRESTController.php';
+require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashUtils.php';
 
 class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
 {
@@ -18,34 +19,71 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
         $psdata = "";
         $messageCode = 0;
         $success = true;
-        $firstName = Tools::getValue('firstName');
-        $lastName = Tools::getValue('lastName');
-        $email = Tools::getValue('email');
+        list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('fullName'));
+        $phone = Tools::getValue('phone');
         $password = Tools::getValue('password');
-        $gender = Tools::getValue('gender');
-        $newsletter = Tools::getValue('newsletter');
 
-        if (empty($email)) {
-            $psdata = $this->trans("An email address required", [], 'Modules.Binshopsrest.Auth');
+        if (empty($phone)) {
+            $psdata = $this->trans("Phone is required", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 301;
-        } elseif (!Validate::isEmail($email)) {
-            $psdata = $this->trans("Invalid email address", [], 'Modules.Binshopsrest.Auth');
+        } elseif (!Validate::isKoreanPhoneNumber($phone)) {
+            $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
-        } elseif (empty($password)) {
-            $psdata = $this->trans('Password is not provided', [], 'Modules.Binshopsrest.Auth');
-            $messageCode = 303;
-        } elseif (!Validate::isPasswd($password)) {
-            $psdata = $this->trans("Invalid Password", [], 'Modules.Binshopsrest.Auth');
-            $messageCode = 304;
-        } elseif (empty($firstName)) {
-            $psdata = $this->trans("First name required", [], 'Modules.Binshopsrest.Auth');
+        } elseif (empty($firstName) || empty($lastName)) {
+            $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 305;
-        } elseif (empty($lastName)) {
-            $psdata = $this->trans("Last name required", [], 'Modules.Binshopsrest.Auth');
-            $messageCode = 306;
-        } elseif (Customer::customerExists($email, false, true)) {
-            $psdata = $this->trans("User already exists - checked by email", [], 'Modules.Binshopsrest.Auth');
-            $messageCode = 308;
+        } elseif (!empty($password)) {
+            // copy-pasted from removed login controller
+
+            Hook::exec('actionAuthenticationBefore');
+            $customer = new Customer();
+            $authentication = $customer->getByEmail(
+                $phone,
+                $password
+            );
+
+            if (isset($authentication->active) && !$authentication->active) {
+                $psdata = $this->trans('Your account isn\'t available at this time.', [], 'Modules.Binshopsrest.Auth');
+                $messageCode = 305;
+            } elseif (!$authentication || !$customer->id || $customer->is_guest) {
+                $psdata = $this->trans("Authentication failed", [], 'Modules.Binshopsrest.Auth');
+                $messageCode = 306;
+            } else {
+                $this->context->updateCustomer($customer);
+
+                Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);
+
+                $messageCode = 200;
+                $user = $this->context->customer;
+                unset($user->secure_key);
+                unset($user->passwd);
+                unset($user->last_passwd_gen);
+                unset($user->reset_password_token);
+                unset($user->reset_password_validity);
+
+                $psdata = array(
+                    'status' => 'success',
+                    'message' => $this->trans('User login successfully', [], 'Modules.Binshopsrest.Auth'),
+                    'customer_id' => $customer->id,
+                    'session_data' => (int)$this->context->cart->id,
+                    'cart_count' => Cart::getNbProducts($this->context->cookie->id_cart),
+                    'user' => $user
+                );
+
+                // Login information have changed, so we check if the cart rules still apply
+                CartRule::autoRemoveFromCart($this->context);
+                CartRule::autoAddToCart($this->context);
+            }
+        } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
+            $customer = new Customer($customerId);
+            $customer->sendOtpByPhone();
+
+            $messageCode = 200;
+            $psdata = array(
+                'is_otp_sent' => true,
+                'message' => $this->trans('Confirmation code has been sent to your phone.', [], 'Modules.Binshopsrest.Auth'),
+                'session_data' => (int)$this->context->cart->id
+            );
         } else {
             $guestAllowedCheckout = Configuration::get('PS_GUEST_CHECKOUT_ENABLED');
             $cp = new CustomerPersister(
@@ -58,7 +96,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 $customer = new Customer();
                 $customer->firstname = $firstName;
                 $customer->lastname = $lastName;
-                $customer->email = $email;
+                $customer->email = $phone;
                 $customer->id_gender = $gender;
                 $customer->id_shop = (int)$this->context->shop->id;
                 $customer->newsletter = $newsletter;
