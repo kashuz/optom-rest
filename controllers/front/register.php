@@ -85,29 +85,25 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 305;
         } else {
-            $guestAllowedCheckout = Configuration::get('PS_GUEST_CHECKOUT_ENABLED');
             $cp = new CustomerPersister(
                 $this->context,
                 $this->get('hashing'),
                 $this->getTranslator(),
-                $guestAllowedCheckout
+                false
             );
             try {
                 $customer = new Customer();
                 $customer->firstname = $firstName;
                 $customer->lastname = $lastName;
-                $customer->email = $phone;
-                $customer->id_gender = $gender;
+                $customer->kash_phone = $phone;
                 $customer->id_shop = (int)$this->context->shop->id;
-                $customer->newsletter = $newsletter;
 
-                $status = $cp->save($customer, $password);
+                $status = $cp->save($customer, KashUtils::generateRandomString());
 
                 $messageCode = 200;
                 $psdata = array(
                     'registered' => $status,
                     'message' => $this->trans('User registered successfully', [], 'Modules.Binshopsrest.Auth'),
-                    'customer_id' => $customer->id,
                     'session_data' => (int)$this->context->cart->id
                 );
             } catch (Exception $exception) {

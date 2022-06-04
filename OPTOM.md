@@ -19,4 +19,4 @@
     * if "password" field is provided then login attempt is performed; if not, then further logic is performed;
     * customer is searched by "kash_phone"; if found OTP is sent and in API result "is_otp_sent" => true property is set; if not, then further logic is performed;
     * "full_name" field is obligarory ("firstname" and "lastname" fields are not necessary);
-    * 
+    * upon registration of customer it is not logged in automatically, instead of this OTP is sent to phone, you should render for the customer password field and keep entered phone in UI to allow repeated sbmission to the same controller which will login him.
