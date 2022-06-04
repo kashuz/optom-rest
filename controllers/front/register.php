@@ -19,8 +19,8 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
         $psdata = "";
         $messageCode = 0;
         $success = true;
-        list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('fullName'));
-        $phone = Tools::getValue('phone');
+        list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('full_name'));
+        $phone = Tools::getValue('kash_phone');
         $password = Tools::getValue('password');
 
         if (empty($phone)) {
@@ -29,9 +29,6 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
         } elseif (!Validate::isKoreanPhoneNumber($phone)) {
             $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
-        } elseif (empty($firstName) || empty($lastName)) {
-            $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
-            $messageCode = 305;
         } elseif (!empty($password)) {
             // copy-pasted from removed login controller
 
@@ -84,6 +81,9 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 'message' => $this->trans('Confirmation code has been sent to your phone.', [], 'Modules.Binshopsrest.Auth'),
                 'session_data' => (int)$this->context->cart->id
             );
+        } elseif (empty($firstName) || empty($lastName)) {
+            $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
+            $messageCode = 305;
         } else {
             $guestAllowedCheckout = Configuration::get('PS_GUEST_CHECKOUT_ENABLED');
             $cp = new CustomerPersister(
