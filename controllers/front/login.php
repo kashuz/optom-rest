@@ -18,7 +18,7 @@ class BinshopsrestLoginModuleFrontController extends AbstractRESTController
         $_POST = json_decode(Tools::file_get_contents('php://input'), true);
         $psdata = "";
         $messageCode = 0;
-        $email = Tools::getValue('email', '');
+        $phone = Tools::getValue('phone', '');
         $password = Tools::getValue('password', '');
         $cart_id = Tools::getValue('session_data', '');
 
@@ -29,23 +29,23 @@ class BinshopsrestLoginModuleFrontController extends AbstractRESTController
             $this->context->cookie->write();
         }
 
-        if (empty($email)) {
-            $psdata = $this->trans("An email address required", [], 'Modules.Binshopsrest.Auth');
+        if (empty($phone)) {
+            $psdata = $this->trans("Phone is required", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 301;
-        } elseif (!Validate::isEmail($email)) {
-            $psdata = $this->trans("Invalid email address", [], 'Modules.Binshopsrest.Auth');
+        } elseif (!Validate::isKoreanPhoneNumber($phone)) {
+            $psdata = $this->trans("Invalid phone", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
         } elseif (empty($password)) {
             $psdata = $this->trans('Password is not provided', [], 'Modules.Binshopsrest.Auth');
             $messageCode = 303;
-        } elseif (!Validate::isPasswd($password)) {
+        } elseif (!preg_match('^([0-9]+)$', $password)) {
             $psdata = $this->trans("Invalid Password", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 304;
         } else {
             Hook::exec('actionAuthenticationBefore');
             $customer = new Customer();
             $authentication = $customer->getByEmail(
-                $email,
+                $phone,
                 $password
             );
 
