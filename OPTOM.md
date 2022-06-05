@@ -2,6 +2,7 @@
 
 * Unused APIs were removed (they never should bew used in mobile application too):
     * accountedit
+    * addressform
     * carriers
     * emailsubscription
     * login
