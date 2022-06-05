@@ -93,17 +93,24 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 false
             );
             try {
+                $phone = Validate::cleanKoreanPhoneNumber($phone);
+
                 $customer = new Customer();
                 $customer->firstname = $firstName;
                 $customer->lastname = $lastName;
                 $customer->kash_full_name = Tools::getValue('kash_full_name');
-                $customer->kash_phone = Validate::cleanKoreanPhoneNumber($phone);
+                $customer->kash_phone = $phone;
+                $customer->email = $phone . Customer::DUMMY_EMAIL_DOMAIN;
                 $customer->id_shop = (int)$this->context->shop->id;
 
                 $status = $cp->save($customer, KashUtils::generateRandomString());
 
                 $resultMessage = null;
-                $customer->sendOtpToPhone($resultMessage);
+                if ($status) {
+                    $customer->sendOtpToPhone($resultMessage);
+                } else {
+                    $resultMessage = implode(' ', call_user_func_array('array_merge', $cp->getErrors()));
+                }
 
                 $messageCode = 200;
                 $psdata = array(
