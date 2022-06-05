@@ -19,7 +19,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
         $psdata = "";
         $messageCode = 0;
         $success = true;
-        list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('full_name'));
+        list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('kash_full_name'));
         $phone = Tools::getValue('kash_phone');
         $password = Tools::getValue('password');
 
@@ -96,13 +96,14 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 $customer = new Customer();
                 $customer->firstname = $firstName;
                 $customer->lastname = $lastName;
-                $customer->kash_phone = $phone;
+                $customer->kash_full_name = Tools::getValue('kash_full_name');
+                $customer->kash_phone = Validate::cleanKoreanPhoneNumber($phone);
                 $customer->id_shop = (int)$this->context->shop->id;
 
                 $status = $cp->save($customer, KashUtils::generateRandomString());
 
                 $resultMessage = null;
-                $customer->sendOtpByPhone($resultMessage);
+                $customer->sendOtpToPhone($resultMessage);
 
                 $messageCode = 200;
                 $psdata = array(
