@@ -22,3 +22,6 @@
     * "full_name" field is obligatory ("firstname" and "lastname" fields are not necessary);
     * upon registration of customer it is not logged in automatically, instead of this OTP is sent to phone, you should render the password field for the customer and keep entered phone in UI to allow repeated sbmission to the same controller which will login him.
 * Integration with COAM API was added in "ps_coam" endpoint.
+* Address controller was changed (the appropriate changes must be performed in the mobile application):
+    * number of required fields was minimized;
+    * default values were added.
