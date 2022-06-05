@@ -5,6 +5,7 @@
     * addressform
     * carriers
     * emailsubscription
+    * hello
     * login
     * paymentoptions
     * ps_checkpayment
