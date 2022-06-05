@@ -167,6 +167,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-ps_coam' => [
+                'rule' => 'rest/ps_coam',
+                'keywords' => [],
+                'controller' => 'ps_coam',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-wishlist' => [
                 'rule' => 'rest/wishlist',
                 'keywords' => [],
