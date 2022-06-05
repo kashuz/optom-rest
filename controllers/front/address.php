@@ -10,12 +10,12 @@
  */
 
 require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
+require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashImageManager.php';
 
 use PrestaShop\PrestaShop\Adapter\Product\PriceFormatter;
 
 class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTController
 {
-
     protected function processGetRequest()
     {
         $address = new Address(
@@ -91,6 +91,13 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         $address->id_state = Tools::getValue('id_state');
         $address->city = '(city is not set)';
         $address->address1 = Tools::getValue('address1');
+
+        if (
+            !empty(Tools::getValue('kash_photo_base64'))
+            && !empty(Tools::getValue('kash_photo_name'))
+        ) {
+            KashImageManager::preuploadFromBase64('kash_photo', Tools::getValue('kash_photo_base64'), Tools::getValue('kash_photo_name'));
+        }
 
         Hook::exec('actionSubmitCustomerAddressForm', ['address' => &$address]);
 
