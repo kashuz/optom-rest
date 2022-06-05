@@ -53,21 +53,6 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         );
 
         $country = $formatter->getCountry();
-        if ($country->need_zip_code){
-            if (!$country->checkZipCode(Tools::getValue('postcode'))) {
-                $this->ajaxRender(json_encode([
-                    'success' => false,
-                    'code' => 303,
-                    'psdata' => [],
-                    'message' => $this->translator->trans(
-                        'Invalid postcode - should look like "%zipcode%"',
-                        ['%zipcode%' => $country->zip_code_format],
-                        'Shop.Forms.Errors'
-                    )
-                ]));
-                die;
-            }
-        }
 
         if (Tools::getValue('id_address')) {
             $msg = "Successfully updated address";
@@ -81,7 +66,10 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         );
 
         if (!Tools::getValue('id_state')) {
-            $address->id_state = 0;
+            $address->id_state = State::getIdByIso(
+                AddressFormat::STATE_MAINLAND_ISO_CODE,
+                $country->id
+            );
         }
 
         $deliveryOptionsFinder = new DeliveryOptionsFinder(
@@ -97,20 +85,12 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
 
         $address->firstname = $session->getCustomer()->firstname;
         $address->lastname = $session->getCustomer()->lastname;
+        $address->phone = $session->getCustomer()->kash_phone;
 
-        $address->alias = Tools::getValue('alias');
-        $address->id_country = Tools::getValue('id_country');
-        $address->country = Tools::getValue('country');
+        $address->id_country = $country->id;
         $address->id_state = Tools::getValue('id_state');
-        $address->postcode = Tools::getValue('postcode');
-        $address->city = Tools::getValue('city');
+        $address->city = '(city is not set)';
         $address->address1 = Tools::getValue('address1');
-        $address->address2 = Tools::getValue('address2');
-        $address->company = Tools::getValue('company');
-        $address->other = Tools::getValue('other');
-        $address->phone = Tools::getValue('phone');
-        $address->phone_mobile = Tools::getValue('phone_mobile');
-        $address->vat_number = Tools::getValue('vat_number');
 
         Hook::exec('actionSubmitCustomerAddressForm', ['address' => &$address]);
 
@@ -208,29 +188,9 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         $psdata['valid'] = true;
         $psdata['errors'] = array();
 
-        if (!Tools::getValue('alias')) {
-            $psdata['valid'] = false;
-            $psdata['errors'][] = "alias-required";
-        }
-        if (!Tools::getValue('postcode')) {
-            $psdata['valid'] = false;
-            $psdata['errors'][] = "postcode-required";
-        }
         if (!Tools::getValue('address1')) {
             $psdata['valid'] = false;
             $psdata['errors'][] = "address1-required";
-        }
-        if (!Tools::getValue('id_country')) {
-            $psdata['valid'] = false;
-            $psdata['errors'][] = "id_country-required";
-        }
-        if (!Tools::getValue('country')) {
-            $psdata['valid'] = false;
-            $psdata['errors'][] = "country-required";
-        }
-        if (!Tools::getValue('city')) {
-            $psdata['valid'] = false;
-            $psdata['errors'][] = "city-required";
         }
 
         return $psdata;
