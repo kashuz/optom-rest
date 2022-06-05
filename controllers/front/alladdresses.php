@@ -20,6 +20,15 @@ class BinshopsrestAlladdressesModuleFrontController extends AbstractRESTControll
             $this->context->language->id,
             true // no cache
         );
+        foreach ($psdata as &$address) {
+            if (!empty($address['kash_photo'])) {
+                $addressObject = new Address($address['id']);
+                $addressObject->loadPhoto();
+                $address['kash_photo_base64'] = $address->kash_photo_base64;
+                $address['kash_photo_thumbnail_base64'] = $address->kash_photo_thumbnail_base64;
+            }
+        }
+        unset($address);
 
         $this->ajaxRender(json_encode([
             'success' => true,

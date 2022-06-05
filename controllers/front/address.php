@@ -119,6 +119,8 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
                 'psdata' => "internal-server-error"
             ]));
             die;
+        } else {
+            $address->loadPhoto();
         }
 
         $this->ajaxRender(json_encode([

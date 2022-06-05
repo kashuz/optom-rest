@@ -25,4 +25,4 @@
 * Address controller was changed (the appropriate changes must be performed in the mobile application):
     * number of required fields was minimized;
     * default values were added;
-    * for posting photo the following fields must be specified in mobile application, kash_photo_base64 (with photo file data encoded i n base64), kash_photo_name (with original file name).
+    * for posting photo the following fields must be specified in mobile application, kash_photo_base64 (with photo file data encoded in base64), kash_photo_name (with original file name).
