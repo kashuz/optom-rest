@@ -74,7 +74,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
         } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
             $customer = new Customer($customerId);
             $resultMessage = null;
-            $customer->sendOtpByPhone($resultMessage);
+            $customer->sendOtpToPhone($resultMessage);
 
             $messageCode = 200;
             $psdata = array(
