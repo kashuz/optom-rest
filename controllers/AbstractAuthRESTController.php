@@ -23,7 +23,7 @@ abstract class AbstractAuthRESTController extends AbstractRESTController
     {
         header('Content-Type: ' . "application/json");
         $this->login();
-        if (!$this->isLogged()) {
+        if (!$this->context->customer->isLogged()) {
             $this->ajaxRender(json_encode([
                 'code' => 410,
                 'success' => false,

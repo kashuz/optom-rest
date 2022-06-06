@@ -34,13 +34,15 @@ trait AuthTrait
             $psdata = $this->trans("Authentication failed", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 306;
         } else {
-            $this->context->cart = new Cart(Tools::getValue('session_data'));
+            if (!$this->context->cart) {
+                $this->context->cart = new Cart(Tools::getValue('session_data'));
+            }
             $this->context->updateCustomer($customer);
 
             Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);
 
             $messageCode = 200;
-            $user = $this->context->customer;
+            $user = clone $this->context->customer;
             unset($user->secure_key);
             unset($user->passwd);
             unset($user->last_passwd_gen);
@@ -62,15 +64,5 @@ trait AuthTrait
         }
 
         return is_array($psdata) && isset($psdata['customer_id']) && $psdata['customer_id'] && $messageCode == 200;
-    }
-
-    protected function isLogged()
-    {
-        return
-            Context::getContext()->customer->logged == 1
-            && Context::getContext()->customer->id
-            && Validate::isUnsignedId(Context::getContext()->customer->id)
-            && Context::getContext()->cookie->isSessionAlive()
-            ;
     }
 }
