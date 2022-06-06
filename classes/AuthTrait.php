@@ -21,6 +21,7 @@ trait AuthTrait
 
         Hook::exec('actionAuthenticationBefore');
         $customer = new Customer();
+        $customer->useRestOtpLifetime = true;
         $authentication = $customer->getByEmail(
             Validate::cleanKoreanPhoneNumber(Tools::getValue('kash_phone')),
             Tools::getValue('password')
