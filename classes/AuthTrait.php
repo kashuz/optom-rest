@@ -63,4 +63,14 @@ trait AuthTrait
 
         return is_array($psdata) && isset($psdata['customer_id']) && $psdata['customer_id'] && $messageCode == 200;
     }
+
+    protected function isLogged()
+    {
+        return
+            Context::getContext()->customer->logged == 1
+            && Context::getContext()->customer->id
+            && Validate::isUnsignedId(Context::getContext()->customer->id)
+            && Context::getContext()->cookie->isSessionAlive()
+            ;
+    }
 }

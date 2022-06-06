@@ -25,7 +25,7 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
     {
         header('Content-Type: ' . "application/json");
         $this->login();
-        if (!$this->context->customer->isLogged() && $this->php_self != 'authentication' && $this->php_self != 'password') {
+        if (!$this->isLogged()) {
             $this->ajaxRender(json_encode([
                 'code' => 410,
                 'success' => false,
