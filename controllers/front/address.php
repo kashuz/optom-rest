@@ -96,7 +96,7 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
             !empty(Tools::getValue('kash_photo_base64'))
             && !empty(Tools::getValue('kash_photo_name'))
         ) {
-            KashImageManager::preuploadFromBase64('kash_photo', Tools::getValue('kash_photo_base64'), Tools::getValue('kash_photo_name'));
+            KashImageManager::preuploadFromBase64('kash_photo', Tools::getValue('kash_photo_name'), Tools::getValue('kash_photo_base64'));
         }
 
         Hook::exec('actionSubmitCustomerAddressForm', ['address' => &$address]);
