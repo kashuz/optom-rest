@@ -11,7 +11,7 @@ trait AuthTrait
 {
     protected function login(
         &$messageCode = null,
-        &$psData = null
+        &$psdata = null
     ) {
         // code is copy-pasted from removed login controller
 
@@ -34,6 +34,7 @@ trait AuthTrait
             $psdata = $this->trans("Authentication failed", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 306;
         } else {
+            $this->context->cart = new Cart(Tools::getValue('session_data'));
             $this->context->updateCustomer($customer);
 
             Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);

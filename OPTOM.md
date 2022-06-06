@@ -37,7 +37,7 @@
 
 Upon initial login mobile application should save OTP in its own secure part of memory. For mobile application OTP lifetime is 8 hours (for web access it is just 10 minutes).
 
-On each subsequent request to secured API endpoints customer's phone and OTP must be sent in POST parameters "kash_phone" and "password".     
+On each subsequent request to secured API endpoints customer's phone, OTP, and cart ID must be sent in POST parameters "kash_phone", "password", and "session_data".     
 
 # Debugging and testing
 
