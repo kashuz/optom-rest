@@ -9,11 +9,11 @@
  *
  */
 
-require_once dirname(__FILE__) . '/../AbstractRESTController.php';
+require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
 
-class BinshopsrestAlladdressesModuleFrontController extends AbstractRESTController
+class BinshopsrestAlladdressesModuleFrontController extends AbstractAuthRESTController
 {
-    protected function processGetRequest()
+    protected function processPostRequest()
     {
         $customer = $this->context->customer;
         $psdata = $customer->getSimpleAddresses(
@@ -21,11 +21,11 @@ class BinshopsrestAlladdressesModuleFrontController extends AbstractRESTControll
             true // no cache
         );
         foreach ($psdata as &$address) {
-            if (!empty($address['kash_photo'])) {
-                $addressObject = new Address($address['id']);
+            $addressObject = new Address($address['id']);
+            if (!empty($addressObject->kash_photo)) {
                 $addressObject->loadPhoto();
-                $address['kash_photo_base64'] = $address->kash_photo_base64;
-                $address['kash_photo_thumbnail_base64'] = $address->kash_photo_thumbnail_base64;
+                $address['kash_photo_base64'] = $addressObject->kash_photo_base64;
+                $address['kash_photo_thumbnail_base64'] = $addressObject->kash_photo_thumbnail_base64;
             }
         }
         unset($address);
