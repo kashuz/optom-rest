@@ -85,12 +85,13 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
 
         $address->firstname = $session->getCustomer()->firstname;
         $address->lastname = $session->getCustomer()->lastname;
-        $address->phone = $session->getCustomer()->kash_phone;
+        $address->phone = Validate::cleanKoreanPhoneNumber($session->getCustomer()->kash_phone);
 
         $address->id_country = $country->id;
         $address->id_state = Tools::getValue('id_state');
         $address->city = '(city is not set)';
         $address->address1 = Tools::getValue('address1');
+        $address->alias = '(alias is not set)';
 
         if (
             !empty(Tools::getValue('kash_photo_base64'))
@@ -107,10 +108,19 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
             Tools::getToken(true, $this->context)
         );
 
-        $saved = $persister->save(
-            $address,
-            Tools::getToken(true, $this->context)
-        );
+        try {
+            $saved = $persister->save(
+                $address,
+                Tools::getToken(true, $this->context)
+            );
+        } catch (Exception $e) {
+            $this->ajaxRender(json_encode([
+                'success' => false,
+                'code' => 302,
+                'psdata' => $e->getMessage()
+            ]));
+            die;
+        }
 
         if (!$saved) {
             $this->ajaxRender(json_encode([
