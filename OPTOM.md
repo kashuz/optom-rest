@@ -1,3 +1,7 @@
+# Installation prerequisites
+
+* "kash_checkout" and "kash_coam" modules must be installed in advance.
+
 # Differences between "optom" and "master" branches
 
 * Unused APIs were removed (they never should bew used in mobile application too):
@@ -28,3 +32,13 @@
     * default values were added;
     * for posting photo the following fields must be specified in mobile application, kash_photo_base64 (with photo file data encoded in base64), kash_photo_name (with original file name);
     * in fetched addresses properties two new properties, kash_photo_base64 and kash_photo_thumbnail_base64 have been added, you may use them for rendering address photos in mobile application UI.
+    
+# Authentication logic
+
+Upon initial login mobile application should save OTP in its own secure part of memory. For mobile application OTP lifetime is 8 hours (for web access it is just 10 minutes).
+
+On each subsequent request to secured API endpoints customer's phone and OTP must be sent in POST parameters "kash_phone" and "password".     
+
+# Debugging and testing
+
+Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest

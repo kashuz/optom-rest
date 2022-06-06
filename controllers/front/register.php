@@ -30,47 +30,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
         } elseif (!empty($password)) {
-            // copy-pasted from removed login controller
-
-            Hook::exec('actionAuthenticationBefore');
-            $customer = new Customer();
-            $authentication = $customer->getByEmail(
-                $phone,
-                $password
-            );
-
-            if (isset($authentication->active) && !$authentication->active) {
-                $psdata = $this->trans('Your account isn\'t available at this time.', [], 'Modules.Binshopsrest.Auth');
-                $messageCode = 305;
-            } elseif (!$authentication || !$customer->id || $customer->is_guest) {
-                $psdata = $this->trans("Authentication failed", [], 'Modules.Binshopsrest.Auth');
-                $messageCode = 306;
-            } else {
-                $this->context->updateCustomer($customer);
-
-                Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);
-
-                $messageCode = 200;
-                $user = $this->context->customer;
-                unset($user->secure_key);
-                unset($user->passwd);
-                unset($user->last_passwd_gen);
-                unset($user->reset_password_token);
-                unset($user->reset_password_validity);
-
-                $psdata = array(
-                    'status' => 'success',
-                    'message' => $this->trans('User login successfully', [], 'Modules.Binshopsrest.Auth'),
-                    'customer_id' => $customer->id,
-                    'session_data' => (int)$this->context->cart->id,
-                    'cart_count' => Cart::getNbProducts($this->context->cookie->id_cart),
-                    'user' => $user
-                );
-
-                // Login information have changed, so we check if the cart rules still apply
-                CartRule::autoRemoveFromCart($this->context);
-                CartRule::autoAddToCart($this->context);
-            }
+            $this->login($messageCode, $psdata);
         } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
             $customer = new Customer($customerId);
             $resultMessage = null;

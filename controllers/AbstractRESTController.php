@@ -10,10 +10,12 @@
  */
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
+require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 
 abstract class AbstractRESTController extends ModuleFrontController
 {
     use RESTTrait;
+    use AuthTrait;
 
     private $img1 = 'large';
     private $img2 = 'medium';
