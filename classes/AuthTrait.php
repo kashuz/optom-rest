@@ -13,7 +13,7 @@ trait AuthTrait
         &$messageCode = null,
         &$psdata = null
     ) {
-        // code is copy-pasted from removed login controller
+        // the most part of code is copy-pasted from removed login controller
 
         if (empty($_POST)) {
             $_POST = json_decode(Tools::file_get_contents('php://input'), true);
