@@ -1,14 +1,28 @@
 <?php
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
+require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 
-abstract class AbstractCartRESTController extends CartControllerCore {
+abstract class AbstractCartRESTController extends CartControllerCore
+{
     use RESTTrait;
+    use AuthTrait;
 
     public function init()
     {
         header('Content-Type: ' . "application/json");
+        $this->performAuthenticationViaHeaders();
+        if (!$this->context->customer->isLogged()) {
+            $this->ajaxRender(json_encode([
+                'code' => 410,
+                'success' => false,
+                'message' => $this->trans('User Not Authenticated', [], 'Modules.Binshopsrest.Admin')
+            ]));
+            die;
+        }
+
         parent::init();
+
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 $this->processGetRequest();

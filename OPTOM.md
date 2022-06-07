@@ -34,6 +34,7 @@
     * in fetched addresses properties two new properties, kash_photo_base64 and kash_photo_thumbnail_base64 have been added, you may use them for rendering address photos in mobile application UI.
 * Addresses controller was changed to return address photos.
 * Posting product comments was allowed for authenticated users only.
+* Cart operations were allowed for authenticated users only.
     
 # Authentication logic
 

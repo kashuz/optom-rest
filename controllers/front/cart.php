@@ -70,9 +70,7 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
 
     protected function updateCart()
     {
-        // Update the cart ONLY if $this->cookies are available, in order to avoid ghost carts created by bots
-        if ($this->context->cookie->exists()
-            && !$this->errors)
+        if (!$this->errors)
         {
             if (Tools::getIsset('add') || Tools::getIsset('update')) {
                 $this->processChangeProductInCart();
@@ -116,11 +114,11 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
                     CartRule::autoAddToCart($this->context);
                 }
             }
-        } elseif (!$this->isTokenValid() && Tools::getValue('action') !== 'show' && !Tools::getValue('ajax')) {
+        } else {
             $this->ajaxRender(json_encode([
                 'code' => 301,
                 'success' => false,
-                'message' => $this->trans('Cookie is not set', [], 'Modules.Binshopsrest.Cart'),
+                'message' => implode(' ', $this->errors),
             ]));
             die;
         }
