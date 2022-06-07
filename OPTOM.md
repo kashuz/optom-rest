@@ -32,7 +32,8 @@
     * default values were added;
     * for posting photo the following fields must be specified in mobile application, kash_photo_base64 (with photo file data encoded in base64), kash_photo_name (with original file name);
     * in fetched addresses properties two new properties, kash_photo_base64 and kash_photo_thumbnail_base64 have been added, you may use them for rendering address photos in mobile application UI.
-* All addresses controller was changed to return address photos.
+* Addresses controller was changed to return address photos.
+* Posting product comments was allowed for authenticated users only.
     
 # Authentication logic
 
