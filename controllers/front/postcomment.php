@@ -13,9 +13,9 @@ use PrestaShop\Module\ProductComment\Entity\ProductCommentCriterion;
 use PrestaShop\Module\ProductComment\Entity\ProductCommentGrade;
 use PrestaShop\Module\ProductComment\Repository\ProductCommentRepository;
 
-require_once dirname(__FILE__) . '/../AbstractRESTController.php';
+require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
 
-class BinshopsrestPostcommentModuleFrontController extends AbstractRESTController
+class BinshopsrestPostcommentModuleFrontController extends AbstractAuthRESTController
 {
     protected function processPostRequest()
     {
