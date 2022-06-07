@@ -11,6 +11,7 @@
 
 require_once dirname(__FILE__) . '/../AbstractProductListingRESTController.php';
 require_once dirname(__FILE__) . '/../../classes/RESTProductLazyArray.php';
+require_once dirname(__FILE__) . '/../../classes/AuthTrait.php';
 define('PRICE_REDUCTION_TYPE_PERCENT', 'percentage');
 
 use PrestaShop\Module\BlockWishList\Search\WishListProductSearchProvider;
@@ -21,34 +22,61 @@ use PrestaShop\PrestaShop\Core\Product\Search\SortOrderFactory;
 
 class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRESTController
 {
+    use AuthTrait;
+
     public $ssl = true;
 
     private $wishlist;
 
+    public function init()
+    {
+        $this->performAuthenticationViaHeaders();
+        if (!$this->context->customer->isLogged()) {
+            header('Content-Type: ' . "application/json");
+            $this->ajaxRender(json_encode([
+                'code' => 410,
+                'success' => false,
+                'message' => $this->trans('User Not Authenticated', [], 'Modules.Binshopsrest.Admin')
+            ]));
+            die;
+        }
+
+        parent::init();
+    }
+
     protected function processGetRequest()
     {
-        switch (Tools::getValue('action')){
-            case 'list':
-                $this->listWishlists();
-                break;
-            case 'addProductToWishlist':
-                $this->addToWishlist();
-                break;
-            case 'viewWishlist':
-                $this->viewWishlist();
-                break;
-            case 'deleteProductFromWishList':
-                $this->deleteProductFromWishList();
-                break;
-            case 'createWishlist':
-                $this->createWishlist();
-                break;
-            case 'deleteWishlist':
-                $this->deleteWishlist();
-                break;
-            case 'renameWishlist':
-                $this->renameWishlist();
-                break;
+        try {
+            switch (Tools::getValue('action')) {
+                case 'list':
+                    $this->listWishlists();
+                    break;
+                case 'addProductToWishlist':
+                    $this->addToWishlist();
+                    break;
+                case 'viewWishlist':
+                    $this->viewWishlist();
+                    break;
+                case 'deleteProductFromWishList':
+                    $this->deleteProductFromWishList();
+                    break;
+                case 'createWishlist':
+                    $this->createWishlist();
+                    break;
+                case 'deleteWishlist':
+                    $this->deleteWishlist();
+                    break;
+                case 'renameWishlist':
+                    $this->renameWishlist();
+                    break;
+            }
+        } catch (Exception $e) {
+            $this->ajaxRender(json_encode([
+                'success' => false,
+                'code' => 310,
+                'message' => $e->getMessage(),
+            ]));
+            die;
         }
     }
 
@@ -66,6 +94,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
             $wishlist->id_customer = $this->context->customer->id;
             $wishlist->name = Configuration::get('blockwishlist_WishlistDefaultTitle', $this->context->language->id);
             $wishlist->default = 1;
+            $wishlist->token = $this->generateWishListToken();
             $wishlist->add();
 
             $infos = WishList::getAllWishListsByIdCustomer($this->context->customer->id);
@@ -125,6 +154,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
                 $wishlist->id_customer = $this->context->customer->id;
                 $wishlist->name = Configuration::get('blockwishlist_WishlistDefaultTitle', $this->context->language->id);
                 $wishlist->default = 1;
+                $wishlist->token = $this->generateWishListToken();
                 $wishlist->add();
 
                 $infos = WishList::getAllWishListsByIdCustomer($this->context->customer->id);
@@ -186,6 +216,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
                 $wishlist->id_customer = $this->context->customer->id;
                 $wishlist->name = Configuration::get('blockwishlist_WishlistDefaultTitle', $this->context->language->id);
                 $wishlist->default = 1;
+                $wishlist->token = $this->generateWishListToken();
                 $wishlist->add();
 
                 $infos = WishList::getAllWishListsByIdCustomer($this->context->customer->id);
@@ -265,6 +296,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
                 $wishlist->id_customer = $this->context->customer->id;
                 $wishlist->name = Configuration::get('blockwishlist_WishlistDefaultTitle', $this->context->language->id);
                 $wishlist->default = 1;
+                $wishlist->token = $this->generateWishListToken();
                 $wishlist->add();
 
                 $infos = WishList::getAllWishListsByIdCustomer($this->context->customer->id);
