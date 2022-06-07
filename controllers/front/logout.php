@@ -9,9 +9,9 @@
  *
  */
 
-require_once dirname(__FILE__) . '/../AbstractRESTController.php';
+require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
 
-class BinshopsrestLogoutModuleFrontController extends AbstractRESTController
+class BinshopsrestLogoutModuleFrontController extends AbstractAuthRESTController
 {
     protected function processGetRequest()
     {
