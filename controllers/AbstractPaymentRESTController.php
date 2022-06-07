@@ -54,12 +54,12 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
         }
     }
 
-    protected final function processGetRequest(){
+    protected final function processPostRequest(){
+        $_POST = json_decode(Tools::file_get_contents('php://input'), true);
+
         $cart = $this->context->cart;
 
         if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
-            Tools::redirect('index.php?controller=order&step=1');
-
             $this->ajaxRender(json_encode([
                 'success' => false,
                 'code' => 301,
@@ -70,7 +70,7 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
 
         if (Validate::isLoadedObject($this->context->cart) && $this->context->cart->OrderExists() == false){
             $this->processRESTPayment();
-        }else{
+        } else {
             $this->ajaxRender(json_encode([
                 'success' => false,
                 'code' => 302,
@@ -95,11 +95,11 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
         die;
     }
 
-    protected final function processPostRequest()
+    protected final function processGetRequest()
     {
         $this->ajaxRender(json_encode([
             'success' => true,
-            'message' => 'POST not supported on this path'
+            'message' => 'GET not supported on this path'
         ]));
         die;
     }
@@ -108,7 +108,7 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
     {
         $this->ajaxRender(json_encode([
             'success' => true,
-            'message' => 'put not supported on this path'
+            'message' => 'PUT not supported on this path'
         ]));
         die;
     }
@@ -117,7 +117,7 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
     {
         $this->ajaxRender(json_encode([
             'success' => true,
-            'message' => 'delete not supported on this path'
+            'message' => 'DELETE not supported on this path'
         ]));
         die;
     }

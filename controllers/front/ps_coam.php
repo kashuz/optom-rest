@@ -78,13 +78,6 @@ class BinshopsrestPs_coamModuleFrontController extends AbstractPaymentRESTContro
                 false,
                 $customer->secure_key
             );
-
-            $this->ajaxRender(json_encode([
-                'success' => true,
-                'code' => 200,
-                'order_id' => $module->current_order
-            ]));
-            die;
         } catch (CoamException $e) {
             $error = null;
             if (count($e->errors)) {
