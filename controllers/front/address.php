@@ -22,6 +22,7 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
             Tools::getValue('id_address'),
             $this->context->language->id
         );
+        $address->loadPhoto();
 
         $this->ajaxRender(json_encode([
             'success' => true,

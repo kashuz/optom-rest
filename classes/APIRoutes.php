@@ -24,7 +24,7 @@ class APIRoutes
                 ]
             ],
             'module-binshopsrest-accountinfo' => [
-                'rule' => 'rest/accountInfo',
+                'rule' => 'rest/accountinfo',
                 'keywords' => [],
                 'controller' => 'accountinfo',
                 'params' => [
