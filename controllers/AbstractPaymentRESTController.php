@@ -24,7 +24,7 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
     public function init()
     {
         header('Content-Type: ' . "application/json");
-        $this->login();
+        $this->performAuthenticationViaHeaders();
         if (!$this->context->customer->isLogged()) {
             $this->ajaxRender(json_encode([
                 'code' => 410,

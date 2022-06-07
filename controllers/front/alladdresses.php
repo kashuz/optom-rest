@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
 
 class BinshopsrestAlladdressesModuleFrontController extends AbstractAuthRESTController
 {
-    protected function processPostRequest()
+    protected function processGetRequest()
     {
         $customer = $this->context->customer;
         $psdata = $customer->getSimpleAddresses(

@@ -30,7 +30,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
         } elseif (!empty($password)) {
-            $this->login($messageCode, $psdata);
+            $this->login($phone, $password, null, $messageCode, $psdata);
         } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
             $customer = new Customer($customerId);
             $resultMessage = null;

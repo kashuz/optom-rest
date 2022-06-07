@@ -9,22 +9,34 @@
 
 trait AuthTrait
 {
+    protected function performAuthenticationViaHeaders()
+    {
+        $phone = $_SERVER['HTTP_KASH_PHONE'] ?? null;
+        $password = $_SERVER['HTTP_KASH_PASSWORD'] ?? null;
+        $cartId = $_SERVER['HTTP_KASH_CART_ID'] ?? null;
+
+        if (!isset($phone, $password, $cartId)) {
+            return false;
+        } else {
+            return $this->login($phone, $password, $cartId);
+        }
+    }
+
     protected function login(
+        $phone,
+        $password,
+        $cartId,
         &$messageCode = null,
         &$psdata = null
     ) {
         // the most part of code is copy-pasted from removed login controller
 
-        if (empty($_POST)) {
-            $_POST = json_decode(Tools::file_get_contents('php://input'), true);
-        }
-
         Hook::exec('actionAuthenticationBefore');
         $customer = new Customer();
         $customer->useRestOtpLifetime = true;
         $authentication = $customer->getByEmail(
-            Validate::cleanKoreanPhoneNumber(Tools::getValue('kash_phone')),
-            Tools::getValue('password')
+            Validate::cleanKoreanPhoneNumber($phone),
+            $password
         );
 
         if (isset($authentication->active) && !$authentication->active) {
@@ -35,7 +47,7 @@ trait AuthTrait
             $messageCode = 306;
         } else {
             if (!$this->context->cart) {
-                $this->context->cart = new Cart(Tools::getValue('session_data'));
+                $this->context->cart = new Cart($cartId);
             }
             $this->context->updateCustomer($customer);
 
