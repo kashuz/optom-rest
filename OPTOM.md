@@ -40,7 +40,7 @@
 
 Upon initial login mobile application should save OTP in its own secure part of memory. For mobile application OTP lifetime is 8 hours (for web access it is just 10 minutes).
 
-On each subsequent request to secured API endpoints customer's phone, OTP, and cart ID must be sent in custom headers "Kash-Phone:", "Kash-Password:", "Kash-Cart-Id:".
+On each subsequent request to secured API endpoints customer's phone, OTP, and cart ID must be sent in custom headers "Kash-Phone:", "Kash-Token:", "Kash-Cart-Id:".
 
 Note: cart ID may be obtained from "session_data" parameter in API response on login. 
 

@@ -18,6 +18,7 @@ class BinshopsrestAccountinfoModuleFrontController extends AbstractAuthRESTContr
         $user = $this->context->customer;
         unset($user->secure_key);
         unset($user->passwd);
+        unset($user->kash_mobile_token);
         unset($user->last_passwd_gen);
         unset($user->reset_password_token);
         unset($user->reset_password_validity);

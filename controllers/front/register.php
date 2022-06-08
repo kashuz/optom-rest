@@ -12,6 +12,12 @@ require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashUtils.php';
 
 class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
 {
+    protected function findCustomerByCredentials($phone, $password)
+    {
+        $customer = new Customer();
+        return $customer->getByEmail($phone, $password);
+    }
+
     protected function processPostRequest()
     {
         $_POST = json_decode(Tools::file_get_contents('php://input'), true);
@@ -30,7 +36,9 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
             $messageCode = 302;
         } elseif (!empty($password)) {
-            $this->login($phone, $password, null, $messageCode, $psdata);
+            if ($this->login($phone, $password, null, $messageCode, $psdata)) {
+                $psdata['kash_mobile_token'] = $psdata['user']->setKashMobileToken();
+            }
         } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
             $customer = new Customer($customerId);
             $resultMessage = null;
