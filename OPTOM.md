@@ -38,11 +38,11 @@
     
 # Authentication logic
 
-Upon initial login mobile application should save OTP in its own secure part of memory. For mobile application OTP lifetime is 8 hours (for web access it is just 10 minutes).
-
+Upon initial login mobile application should save "kash_mobile_token" received from server in its own secure part of memory. Then it can be used eternally to log in to the system.
 On each subsequent request to secured API endpoints customer's phone, OTP, and cart ID must be sent in custom headers "Kash-Phone:", "Kash-Token:", "Kash-Cart-Id:".
-
 Note: cart ID may be obtained from "session_data" parameter in API response on login. 
+
+If user is logging in in desktop browser then mobile session is kept alive, but if user has logged in to desktop browser and then logs in via smartphone or another desktop browser, then the first desktop browser session is ended forcefully.
 
 It is required to allow users to enter in UI passwords not less than 6 digits, or errors including word "email" in core PrestaShop logic will be generated.
 
