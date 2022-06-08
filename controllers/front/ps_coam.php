@@ -78,6 +78,9 @@ class BinshopsrestPs_coamModuleFrontController extends AbstractPaymentRESTContro
                 false,
                 $customer->secure_key
             );
+
+            $this->createNewCart();
+
         } catch (CoamException $e) {
             $error = null;
             if (count($e->errors)) {
@@ -108,5 +111,31 @@ class BinshopsrestPs_coamModuleFrontController extends AbstractPaymentRESTContro
             ]));
             die;
         }
+    }
+
+    protected function createNewCart()
+    {
+        // copy-pasted from FrontController
+
+        $cart = new Cart();
+        $cart->id_lang = (int) $this->context->cookie->id_lang;
+        $cart->id_currency = (int) $this->context->cookie->id_currency;
+        $cart->id_guest = (int) $this->context->cookie->id_guest;
+        $cart->id_shop_group = (int) $this->context->shop->id_shop_group;
+        $cart->id_shop = $this->context->shop->id;
+        if ($this->context->cookie->id_customer) {
+            $cart->id_customer = (int) $this->context->cookie->id_customer;
+            $cart->id_address_delivery = (int) Address::getFirstCustomerAddressId($cart->id_customer);
+            $cart->id_address_invoice = (int) $cart->id_address_delivery;
+        } else {
+            $cart->id_address_delivery = 0;
+            $cart->id_address_invoice = 0;
+        }
+
+        // Needed if the merchant want to give a free product to every visitors
+        $this->context->cart = $cart;
+        CartRule::autoAddToCart($this->context);
+
+        $cart->save();
     }
 }

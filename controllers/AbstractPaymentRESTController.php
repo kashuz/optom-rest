@@ -89,7 +89,8 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
             'code' => 200,
             'message' => 'successful payment',
             'psdata' => [
-                'order' => $presentedOrder
+                'order' => $presentedOrder,
+                'cart_id' => $this->context->cart->id,
             ]
         ]));
         die;

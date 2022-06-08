@@ -54,6 +54,8 @@ Please, note that on failure COAM returns error message in Korean language which
 {"success":false,"code":500,"message":"COAM failure. Please, check error log for details. \uce74\ub4dc\ubc88\ud638 \uc624\ub958\uc785\ub2c8\ub2e4."}
 ```
 
+Upon successful payment new cart ID is returned in "cart_id" property of result. You should use this cart ID for subsequent operations.
+
 # Debugging and testing
 
 Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest
