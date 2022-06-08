@@ -15,7 +15,7 @@ class BinshopsrestLogoutModuleFrontController extends AbstractAuthRESTController
 {
     protected function processGetRequest()
     {
-        $this->context->customer->mylogout();
+        $this->context->customer->myMobileLogout();
 
         $this->ajaxRender(json_encode([
             'code' => 200,
