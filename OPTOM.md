@@ -44,6 +44,8 @@ On each subsequent request to secured API endpoints customer's phone, OTP, and c
 
 Note: cart ID may be obtained from "session_data" parameter in API response on login. 
 
+It is required to allow users to enter in UI passwords not less than 6 digits, or errors including word "email" in core PrestaShop logic will be generated.
+
 # Payment
 
 Please, note that on failure COAM returns error message in Korean language which is formatted in API result in the following way, for example: 

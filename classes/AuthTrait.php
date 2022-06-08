@@ -18,6 +18,9 @@ trait AuthTrait
         if (!isset($phone, $token, $cartId)) {
             return false;
         } else {
+            if (null === $this->getContainer()) {
+                $this->container = $this->buildContainer();
+            }
             return $this->login(Validate::cleanKoreanPhoneNumber($phone), $token, $cartId);
         }
     }
