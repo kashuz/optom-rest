@@ -14,7 +14,7 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
         $divider = 1;
 
         try {
-            $module = Module::getInstanceByName('kash_coam');
+            $module = Module::getInstanceByName('kash_paynet');
             $paynet = new Paynet($this->module);
 
             $exchangeRate = $paynet->getExchangeRate($_POST['countryCode'] ?? null);
