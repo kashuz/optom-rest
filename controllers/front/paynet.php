@@ -47,8 +47,6 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                 );
             } elseif ($_POST['action'] === 'payment') {
                 $psdata['receipt'] = $paynet->pay(
-                    $this->context->customer,
-                    $this->createNewCart(),
                     $_POST['countryCode'] ?? null,
                     $_POST['serviceId'] ?? null,
                     $_POST['phone'] ?? null,
@@ -68,7 +66,6 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     'countryRules' => Paynet::COUNTRY_RULES,
                     'exchangeRate' => $exchangeRate,
                     'divider' => $divider,
-                    'configuration' => $paynet->getConfiguration(),
                 ])
             ]));
             die;
@@ -80,7 +77,6 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                 'psdata' => [
                     'exchangeRate' => $exchangeRate,
                     'divider' => $divider,
-                    'configuration' => $paynet->getConfiguration(),
                 ],
             ]));
             die;
