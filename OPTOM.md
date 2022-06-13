@@ -56,6 +56,20 @@ Please, note that on failure COAM returns error message in Korean language which
 
 Upon successful payment new cart ID is returned in "cart_id" property of result. You should use this cart ID for subsequent operations.
 
+# Paynet
+
+Order of operations to process payment:
+
+* get services and settings for the country via "services" action;
+* validate entered phone number locally and via "phoneValidator" action;
+* open amounts sub-form on success;
+* recalculate value in UZS upon entering it in KRW;
+* on Proceed button click validate amounts via "amountValidation" action;
+* on failure recalculate amounts via returned exchangeRate/divider;
+* submit payment data to "payment" action;
+* on failure recalculate amounts via returned exchangeRate/divider;
+* on success render returned HTML code of receipt.
+
 # Debugging and testing
 
 Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest
