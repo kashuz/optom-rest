@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'modules\\kashpaynet\\' => array($baseDir . '/../kash_paynet/classes'),
     'modules\\kashcoam\\' => array($baseDir . '/../kash_coam/classes'),
 );

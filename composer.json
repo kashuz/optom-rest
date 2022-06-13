@@ -1,7 +1,8 @@
 {
   "autoload-dev": {
     "psr-4": {
-      "modules\\kashcoam\\": "../kash_coam/classes"
+      "modules\\kashcoam\\": "../kash_coam/classes",
+      "modules\\kashpaynet\\": "../kash_paynet/classes"
     }
   }
 }

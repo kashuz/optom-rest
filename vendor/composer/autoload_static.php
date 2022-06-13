@@ -9,11 +9,16 @@ class ComposerStaticInit41a97df3ae9f1451d4575ec46d13019b
     public static $prefixLengthsPsr4 = array (
         'm' => 
         array (
+            'modules\\kashpaynet\\' => 19,
             'modules\\kashcoam\\' => 17,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'modules\\kashpaynet\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/../kash_paynet/classes',
+        ),
         'modules\\kashcoam\\' => 
         array (
             0 => __DIR__ . '/../..' . '/../kash_coam/classes',

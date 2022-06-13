@@ -167,6 +167,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-paynet' => [
+                'rule' => 'rest/paynet',
+                'keywords' => [],
+                'controller' => 'paynet',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-ps_coam' => [
                 'rule' => 'rest/ps_coam',
                 'keywords' => [],
