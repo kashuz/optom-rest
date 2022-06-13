@@ -70,6 +70,8 @@ Order of operations to process payment:
 * on failure recalculate amounts via returned exchangeRate/divider;
 * on success render returned HTML code of receipt.
 
+Logic of calculating amount in UZS: intval(($amount * $exchangeRate) / $divider).
+
 # Debugging and testing
 
 Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest
