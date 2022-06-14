@@ -2,11 +2,13 @@
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
 
 abstract class AbstractCartRESTController extends CartControllerCore
 {
     use RESTTrait;
     use AuthTrait;
+    use KashHeadersTrait;
 
     public function init()
     {
@@ -20,6 +22,8 @@ abstract class AbstractCartRESTController extends CartControllerCore
             ]));
             die;
         }
+
+        $this->processKashHeaders();
 
         parent::init();
 

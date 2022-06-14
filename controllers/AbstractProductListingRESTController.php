@@ -10,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
 
 use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery;
@@ -23,11 +24,14 @@ use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchResult;
 abstract class AbstractProductListingRESTController extends ProductListingFrontController
 {
     use RESTTrait;
+    use KashHeadersTrait;
 
     protected $category;
 
     public function init()
     {
+        $this->processKashHeaders();
+
         header('Content-Type: ' . "application/json");
         parent::init();
         switch ($_SERVER['REQUEST_METHOD']) {

@@ -70,7 +70,7 @@ Order of operations to process payment:
 * on failure recalculate amounts via returned exchangeRate/divider;
 * on success render returned HTML code of receipt.
 
-Logic of calculating amount in UZS: intval(($amount * $exchangeRate) / $divider).
+Logic of calculating amount in UZS: ```intval((($amount * $exchangeRate) / self::EXCHANGE_RATE_DIVIDER) / 100) * 100;```
 
 # Debugging and testing
 

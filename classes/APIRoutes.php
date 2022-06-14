@@ -78,7 +78,7 @@ class APIRoutes
                 ]
             ],
             'module-binshopsrest-categoryproducts' => [
-                'rule' => 'rest/categoryProducts',
+                'rule' => 'rest/categoryproducts',
                 'keywords' => [],
                 'controller' => 'categoryproducts',
                 'params' => [
@@ -87,7 +87,7 @@ class APIRoutes
                 ]
             ],
             'module-binshopsrest-productsearch' => [
-                'rule' => 'rest/productSearch',
+                'rule' => 'rest/productsearch',
                 'keywords' => [],
                 'controller' => 'productsearch',
                 'params' => [
