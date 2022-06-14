@@ -142,7 +142,7 @@ class BinshopsrestPs_coamModuleFrontController extends AbstractPaymentRESTContro
         // copy-pasted from FrontController
 
         $cart = new Cart();
-        $cart->id_lang = (int) $this->context->cookie->id_lang;
+        $cart->id_lang = (int) $this->context->language->id;
         $cart->id_currency = (int) $this->context->cookie->id_currency;
         $cart->id_guest = (int) $this->context->cookie->id_guest;
         $cart->id_shop_group = (int) $this->context->shop->id_shop_group;

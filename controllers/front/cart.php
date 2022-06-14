@@ -37,6 +37,8 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
         $presenter = new CartPresenter();
         $presented_cart = $presenter->present($this->context->cart, $shouldSeparateGifts = true);
 
+        $this->context->cart->id_lang = $this->context->language->id;
+
         $products = $this->context->cart->getProducts(true);
         $link = Context::getContext()->link;
 
