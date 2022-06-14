@@ -49,7 +49,7 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                 $psdata['receipt'] = $paynet->pay(
                     $_POST['countryCode'] ?? null,
                     $_POST['serviceId'] ?? null,
-                    $_POST['phone'] ?? null,
+                    $_POST['phone'] ?? ($_POST['dynamicFields'] ?? null),
                     $_POST['amount'] ?? null,
                     $_POST['amountInLocalCurrency'] ?? null
                 );
