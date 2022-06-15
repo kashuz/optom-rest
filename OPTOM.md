@@ -46,6 +46,10 @@ If user is logging in in desktop browser then mobile session is kept alive, but 
 
 It is required to allow users to enter in UI passwords not less than 6 digits, or errors including word "email" in core PrestaShop logic will be generated.
 
+# Localization and internationalization
+
+Use header Kash-Lang-Iso-Code with possible values "en", "uz", "ru" to change language of text results in cart, products list, and product details.
+
 # Payment
 
 Please, note that on failure COAM returns error message in Korean language which is formatted in API result in the following way, for example: 
@@ -71,6 +75,10 @@ Order of operations to process payment:
 * on success render returned HTML code of receipt.
 
 Logic of calculating amount in UZS: ```intval((($amount * $exchangeRate) / self::EXCHANGE_RATE_DIVIDER) / 100) * 100;```
+
+Returned error messages must be encoded before rendering them for user on the screen. Some may contain raw texts from API, so nobody knows what is inside. Some error messages may contain linebreak symbol \n. it should be replaced with line break on rendering in UI.
+
+Returned receipt data are also raw data from API and must be encoded before rendering in UI.
 
 # Debugging and testing
 

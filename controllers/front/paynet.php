@@ -1,5 +1,6 @@
 <?php
 
+use modules\kashcoam\CoamException;
 use modules\kashpaynet\Paynet;
 
 require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
@@ -28,6 +29,12 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                 $psdata['services'] = json_decode(\Configuration::get('KASH_PAYNET_SERVICES'), true);
                 if (!is_array($psdata['services'])) {
                     $psdata['services'] = [];
+                } else {
+                    foreach ($psdata['services'] as &$service) {
+                        $paynet->addCustomProperties($service);
+                    }
+                    unset($service);
+                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services']);
                 }
             } elseif ($_POST['action'] === 'phoneValidation') {
                 $paynet->validatePhoneNumber(
@@ -67,6 +74,17 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     'exchangeRate' => $exchangeRate,
                     'divider' => $divider,
                 ])
+            ]));
+            die;
+        } catch (CoamException $e) {
+            $this->ajaxRender(json_encode([
+                'success' => false,
+                'code' => 500,
+                'message' => count($e->errors) ? implode(PHP_EOL, $e->errors) : $e->getMessage(),
+                'psdata' => [
+                    'exchangeRate' => $exchangeRate,
+                    'divider' => $divider,
+                ],
             ]));
             die;
         } catch (Exception $e) {
