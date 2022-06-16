@@ -45,7 +45,7 @@ class BinshopsrestOrderHistoryModuleFrontController extends AbstractAuthRESTCont
                     ]));
                     die;
                 } else {
-
+                    $order_to_display->kash_paynet_receipt_array = json_decode($order->kash_paynet_receipt, true);
                     $this->ajaxRender(json_encode([
                         'success' => true,
                         'code' => 200,
@@ -65,11 +65,19 @@ class BinshopsrestOrderHistoryModuleFrontController extends AbstractAuthRESTCont
 
         //process all orders
         $customer_orders = Order::getCustomerOrders($this->context->customer->id);
+        foreach ($customer_orders as $index => $customer_order) {
+            if (
+                Tools::getIsset('is_paynet') && empty($customer_order['kash_paynet_receipt'])
+                || !Tools::getIsset('is_paynet') && !empty($customer_order['kash_paynet_receipt'])
+            ) {
+                unset($customer_orders[$index]);
+            }
+        }
 
         $this->ajaxRender(json_encode([
             'success' => true,
             'code' => 200,
-            'psdata' => $customer_orders
+            'psdata' => array_values($customer_orders),
         ]));
         die;
     }

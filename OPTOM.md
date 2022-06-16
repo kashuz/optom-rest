@@ -80,6 +80,8 @@ Returned error messages must be encoded before rendering them for user on the sc
 
 Returned receipt data are also raw data from API and must be encoded before rendering in UI.
 
+To list only Paynet orders in order history, please, use "is_paynet" => 1 in request parameters. In the list of orders, kash_paynet_receipt is returned as JSON encoded value. In order details, it is returned as array in kash_paynet_receipt_array property.
+
 # Debugging and testing
 
 Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest
