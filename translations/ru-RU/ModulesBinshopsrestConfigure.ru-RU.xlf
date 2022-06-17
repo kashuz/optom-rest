@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="ru-RU" target-language="ru-RU" datatype="plaintext">
+    <body>
+      <trans-unit id="5b1e24b3d262b97c7dcfb1cc6e33f9dd">
+        <source>PrestaShop REST API</source>
+        <target>PrestaShop REST API</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5f8d762df2445d2b8d2a16b9bbdb702f">
+        <source>Your endpoints are ready!</source>
+        <target>Your endpoints are ready!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8d75d2e8e6cf74bb75ee9c33a506f06e">
+        <source>There is no configuration required for this module out of the box. Your endpoint: https://example.com/rest/{endpoint}</source>
+        <target>There is no configuration required for this module out of the box. Your endpoint: https://example.com/rest/{endpoint}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b8724da75fb917e992576b17378e66b3">
+        <source>Endpoints</source>
+        <target>Endpoints</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ee1f3d6e0320d574c7db2a45910ab1ec">
+        <source>List of endpoints</source>
+        <target>List of endpoints</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

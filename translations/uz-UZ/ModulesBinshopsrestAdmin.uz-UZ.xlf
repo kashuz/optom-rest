@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="uz-UZ" target-language="uz-UZ" datatype="plaintext">
+    <body>
+      <trans-unit id="f569ef0ebd154ce5bcd137b589c3f7bd">
+        <source>User Not Authenticated</source>
+        <target>User Not Authenticated</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bb39b2c19df0d320920deba16c8ba1db">
+        <source>GET not supported on this path</source>
+        <target>GET not supported on this path</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="edef920ebdb10d759c213de66c025f0c">
+        <source>POST not supported on this path</source>
+        <target>POST not supported on this path</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="002017c8e258a78f2bb0990bdeabd493">
+        <source>PUT not supported on this path</source>
+        <target>PUT not supported on this path</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a0f768be81452a02a7802c11d2125cdc">
+        <source>DELETE not supported on this path</source>
+        <target>DELETE not supported on this path</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

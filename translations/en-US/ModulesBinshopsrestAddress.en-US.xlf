@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="c624e4ffe2a024076326071d8fe48986">
+        <source>Address is not available</source>
+        <target>Address is not available</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6ba50045f517d7b11d8591b85cf7716a">
+        <source>Address was already deleted</source>
+        <target>Address was already deleted</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c56f1792c834c30911c4a8be542fbc48">
+        <source>Address successfully deleted</source>
+        <target>Address successfully deleted</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

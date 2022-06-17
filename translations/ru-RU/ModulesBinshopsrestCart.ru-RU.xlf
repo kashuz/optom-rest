@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="ru-RU" target-language="ru-RU" datatype="plaintext">
+    <body>
+      <trans-unit id="c141fc2a931b70feeb4dae680eed78e4">
+        <source>Just show - catalog mode is enabled and the action is show</source>
+        <target>Just show - catalog mode is enabled and the action is show</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5984d34c1845ac399dea465236caea96">
+        <source>cart operation successfully done</source>
+        <target>cart operation successfully done</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

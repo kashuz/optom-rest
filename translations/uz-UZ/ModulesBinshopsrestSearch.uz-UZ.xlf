@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="uz-UZ" target-language="uz-UZ" datatype="plaintext">
+    <body>
+      <trans-unit id="c16964e6372b183f710397d4bdaa8f6b">
+        <source>query string is not specified</source>
+        <target>query string is not specified</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

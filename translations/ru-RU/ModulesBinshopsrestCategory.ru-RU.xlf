@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="ru-RU" target-language="ru-RU" datatype="plaintext">
+    <body>
+      <trans-unit id="30331e1969c05dfeb9d269c3d7366058">
+        <source>There is not a category with this slug</source>
+        <target>There is not a category with this slug</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="102f91bf58bd077033d38bb75226916d">
+        <source>Id category or slug not specified</source>
+        <target>Id category or slug not specified</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

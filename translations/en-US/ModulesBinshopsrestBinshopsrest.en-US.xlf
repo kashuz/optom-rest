@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="1be6f9eb563f3bf85c78b4219bf09de9">
+        <source>Brand</source>
+        <target>Brand</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6665e3761028c84e1d228de3432229ed">
+        <source>SKU</source>
+        <target>SKU</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9e2941b3c81256fac10392aaca4ccfde">
+        <source>Condition</source>
+        <target>Condition</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5b1e24b3d262b97c7dcfb1cc6e33f9dd">
+        <source>PrestaShop REST API</source>
+        <target>PrestaShop REST API</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="46e6b2b1df40d0965ab7a7539ae3b400">
+        <source>This module exposes REST API endpoints for your Prestashop website.</source>
+        <target>This module exposes REST API endpoints for your Prestashop website.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7d9977ede66b93de9be6b2bcc581420a">
+        <source>Are you sure you want to uninstall my module?</source>
+        <target>Are you sure you want to uninstall my module?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f4f70727dc34561dfde1a3c529b6205c">
+        <source>Settings</source>
+        <target>Settings</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cebd5bbe0ffdecc270a8a324e5a277dd">
+        <source>Live mode</source>
+        <target>Live mode</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea9df7a306e2f8b5af37b67084d0c984">
+        <source>Use this module in live mode</source>
+        <target>Use this module in live mode</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00d23a76e43b46dae9ec7aa9dcbebb32">
+        <source>Enabled</source>
+        <target>Enabled</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b9f5c797ebbf55adccdd8539a65a0241">
+        <source>Disabled</source>
+        <target>Disabled</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cffa70587159989d91e6ce586ea65c14">
+        <source>Enter a valid email address</source>
+        <target>Enter a valid email address</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ce8ae9da5b7cd6c3df2929543a9af92d">
+        <source>Email</source>
+        <target>Email</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc647eb65e6711e155375218212b3964">
+        <source>Password</source>
+        <target>Password</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
+        <source>Save</source>
+        <target>Save</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

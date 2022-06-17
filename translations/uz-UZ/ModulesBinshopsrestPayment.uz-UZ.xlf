@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="uz-UZ" target-language="uz-UZ" datatype="plaintext">
+    <body>
+      <trans-unit id="e2b7dec8fa4b498156dfee6e4c84b156">
+        <source>This payment method is not available.</source>
+        <target>This payment method is not available.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="050f2782f46d5cbc67a15f1eb136f399">
+        <source>payment processing failed</source>
+        <target>payment processing failed</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="68dcb5ae571f7c4d2374b1d8362136a7">
+        <source>Payment processing failed</source>
+        <target>Payment processing failed</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

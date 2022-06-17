@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="ru-RU" target-language="ru-RU" datatype="plaintext">
+    <body>
+      <trans-unit id="bc4ac11ff8b427cb55f0300fd8b1e932">
+        <source>id_address-required</source>
+        <target>id_address-required</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="53224c889a2e15dbf08eaff505a09f38">
+        <source>id address has been successfully set</source>
+        <target>id address has been successfully set</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="669a0f7ff09c873163ac5f093657bc4d">
+        <source>product id not specified</source>
+        <target>product id not specified</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5216e46550c232af1e83125c22f1990a">
+        <source>product not found</source>
+        <target>product not found</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
