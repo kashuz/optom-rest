@@ -160,7 +160,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
                 $infos = WishList::getAllWishListsByIdCustomer($this->context->customer->id);
             }
             $wishlist = $infos[0];
-            $idWishList = new WishList($wishlist['id_wishlist']);
+            $idWishList = $wishlist['id_wishlist'];
         }
 
         $wishlist = new WishList($idWishList);
@@ -200,7 +200,8 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
         $this->ajaxRender(json_encode([
             'success' => true,
             'code' => 200,
-            'message' => $this->trans('Product added', [], 'Modules.Blockwishlist.Shop')
+            'message' => $this->trans('Product added', [], 'Modules.Blockwishlist.Shop'),
+            'psdata' => $wishlist,
         ]));
         die;
     }
@@ -329,7 +330,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
     private function createWishlist(){
         $wishlistName = Tools::getValue('name');
 
-        if (!$wishlistName){
+        if (empty($wishlistName)){
             $this->ajaxRender(json_encode([
                 'success' => false,
                 'code' => 310,
@@ -393,7 +394,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
                 'message' => $this->trans('Wishlist id required', [], 'Modules.Blockwishlist.Shop')
             ]));
             die;
-        }elseif(!$wishlistName){
+        }elseif(empty($wishlistName)){
             $this->ajaxRender(json_encode([
                 'success' => false,
                 'code' => 320,
@@ -410,7 +411,7 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
 
         if ($wishlist->save()) {
             $this->ajaxRender(json_encode([
-                'success' => false,
+                'success' => true,
                 'code' => 200,
                 'message' => $this->trans('List has been renamed', [], 'Modules.Blockwishlist.Shop')
             ]));
