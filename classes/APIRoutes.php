@@ -32,6 +32,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-accountedit' => [
+                'rule' => 'rest/accountedit',
+                'keywords' => [],
+                'controller' => 'accountedit',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-bootstrap' => [
                 'rule' => 'rest/bootstrap',
                 'keywords' => [],
