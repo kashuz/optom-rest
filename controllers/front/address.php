@@ -66,13 +66,6 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
             $this->context->language->id
         );
 
-        if (!Tools::getValue('id_state')) {
-            $address->id_state = State::getIdByIso(
-                AddressFormat::STATE_MAINLAND_ISO_CODE,
-                $country->id
-            );
-        }
-
         $deliveryOptionsFinder = new DeliveryOptionsFinder(
             $this->context,
             $this->getTranslator(),
@@ -93,6 +86,13 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         $address->city = '(city is not set)';
         $address->address1 = Tools::getValue('address1');
         $address->alias = '(alias is not set)';
+
+        if (!Tools::getValue('id_state')) {
+            $address->id_state = State::getIdByIso(
+                AddressFormat::STATE_MAINLAND_ISO_CODE,
+                $country->id
+            );
+        }
 
         if (
             !empty(Tools::getValue('kash_photo_base64'))

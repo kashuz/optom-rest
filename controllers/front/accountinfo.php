@@ -23,6 +23,15 @@ class BinshopsrestAccountinfoModuleFrontController extends AbstractAuthRESTContr
         unset($user->reset_password_token);
         unset($user->reset_password_validity);
 
+        $availableCountries = Country::getCountries($this->context->language->id, true);
+        $formatter = new CustomerAddressFormatter(
+            $this->context->country,
+            $this->getTranslator(),
+            $availableCountries
+        );
+        $country = $formatter->getCountry();
+        $user->states = State::getStatesByIdCountry($country->id);
+
         $this->ajaxRender(json_encode([
             'code' => 200,
             'success' => true,
