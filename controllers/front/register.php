@@ -48,6 +48,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 $messageCode = 200;
                 $psdata = array(
                     'is_otp_sent' => true,
+                    'otp_repeat_interval' => Customer::OTP_REPEAT_INTERVAL,
                     'message' => $resultMessage,
                     'session_data' => (int)$this->context->cart->id
                 );
