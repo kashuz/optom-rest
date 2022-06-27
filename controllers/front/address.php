@@ -85,7 +85,7 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         $address->id_state = Tools::getValue('id_state');
         $address->city = '(city is not set)';
         $address->address1 = Tools::getValue('address1');
-        $address->alias = '(alias is not set)';
+        $address->alias = Tools::getValue('alias');
 
         if (!Tools::getValue('id_state')) {
             $address->id_state = State::getIdByIso(
