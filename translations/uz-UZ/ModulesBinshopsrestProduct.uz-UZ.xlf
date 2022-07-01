@@ -4,12 +4,12 @@
     <body>
       <trans-unit id="669a0f7ff09c873163ac5f093657bc4d">
         <source>product id not specified</source>
-        <target>product id not specified</target>
+        <target>маҳсулот идентификатори кўрсатилмаган</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="5216e46550c232af1e83125c22f1990a">
         <source>product not found</source>
-        <target>product not found</target>
+        <target>маҳсулот топилмади</target>
         <note>Line: </note>
       </trans-unit>
     </body>

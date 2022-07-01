@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="30331e1969c05dfeb9d269c3d7366058">
         <source>There is not a category with this slug</source>
-        <target>There is not a category with this slug</target>
+        <target>Бу слаг билан тоифа йўқ</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="102f91bf58bd077033d38bb75226916d">

@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="e2b7dec8fa4b498156dfee6e4c84b156">
         <source>This payment method is not available.</source>
-        <target>This payment method is not available.</target>
+        <target>Бу тўлов усули мавжуд емас.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="050f2782f46d5cbc67a15f1eb136f399">
         <source>payment processing failed</source>
-        <target>payment processing failed</target>
+        <target>тўловни амалга ошириб бўлмади</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="68dcb5ae571f7c4d2374b1d8362136a7">
         <source>Payment processing failed</source>
-        <target>Payment processing failed</target>
+        <target>Тўлов амалга ошмади</target>
         <note>Line: </note>
       </trans-unit>
     </body>

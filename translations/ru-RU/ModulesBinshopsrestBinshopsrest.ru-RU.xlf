@@ -59,22 +59,22 @@
       </trans-unit>
       <trans-unit id="cffa70587159989d91e6ce586ea65c14">
         <source>Enter a valid email address</source>
-        <target>Enter a valid email address</target>
+        <target>Введите действительный адрес электронной почты</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="ce8ae9da5b7cd6c3df2929543a9af92d">
         <source>Email</source>
-        <target>Email</target>
+        <target>Электронная почта</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="dc647eb65e6711e155375218212b3964">
         <source>Password</source>
-        <target>Password</target>
+        <target>Пароль</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
         <source>Save</source>
-        <target>Save</target>
+        <target>Сохранить</target>
         <note>Line: </note>
       </trans-unit>
     </body>

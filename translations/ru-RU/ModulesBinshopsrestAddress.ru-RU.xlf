@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="c624e4ffe2a024076326071d8fe48986">
         <source>Address is not available</source>
-        <target>Address is not available</target>
+        <target>Адрес недоступен</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="6ba50045f517d7b11d8591b85cf7716a">
         <source>Address was already deleted</source>
-        <target>Address was already deleted</target>
+        <target>Адрес уже удален</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="c56f1792c834c30911c4a8be542fbc48">
         <source>Address successfully deleted</source>
-        <target>Address successfully deleted</target>
+        <target>Адрес успешно удален</target>
         <note>Line: </note>
       </trans-unit>
     </body>

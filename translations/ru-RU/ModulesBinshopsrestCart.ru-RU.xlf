@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="5984d34c1845ac399dea465236caea96">
         <source>cart operation successfully done</source>
-        <target>cart operation successfully done</target>
+        <target>операция с корзиной успешно завершена</target>
         <note>Line: </note>
       </trans-unit>
     </body>

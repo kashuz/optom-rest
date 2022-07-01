@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="f569ef0ebd154ce5bcd137b589c3f7bd">
         <source>User Not Authenticated</source>
-        <target>User Not Authenticated</target>
+        <target>Фойдаланувчи аутентификация қилинмаган</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="bb39b2c19df0d320920deba16c8ba1db">

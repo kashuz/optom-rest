@@ -4,12 +4,12 @@
     <body>
       <trans-unit id="bc4ac11ff8b427cb55f0300fd8b1e932">
         <source>id_address-required</source>
-        <target>id_address-required</target>
+        <target>id_манзил - талаб қилинади</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="53224c889a2e15dbf08eaff505a09f38">
         <source>id address has been successfully set</source>
-        <target>id address has been successfully set</target>
+        <target>id манзили муваффақиятли ўрнатилди</target>
         <note>Line: </note>
       </trans-unit>
     </body>
