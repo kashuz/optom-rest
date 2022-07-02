@@ -33,12 +33,16 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             if (empty($phone)) {
                 $psdata = $this->trans("Phone is required", [], 'Modules.Binshopsrest.Auth');
                 $messageCode = 301;
+                $success = false;
             } elseif (!Validate::isKoreanPhoneNumber($phone)) {
                 $psdata = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Auth');
                 $messageCode = 302;
+                $success = false;
             } elseif (!empty($password)) {
                 if ($this->login($phone, $password, null, $messageCode, $psdata)) {
                     $psdata['kash_mobile_token'] = $psdata['user']->setKashMobileToken();
+                } else {
+                    $success = false;
                 }
             } elseif ($customerId = Customer::customerExistsByPhone($phone)) {
                 $customer = new Customer($customerId);
@@ -55,6 +59,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             } elseif (empty($firstName) || empty($lastName)) {
                 $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
                 $messageCode = 303;
+                $success = false;
             } else {
                 $cp = new CustomerPersister(
                     $this->context,
@@ -99,6 +104,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
             }
         } catch (Exception $e) {
             $messageCode = 500;
+            $success = false;
             $psdata = $e->getMessage();
         }
 
