@@ -2,6 +2,16 @@
 
 * "kash_checkout" and "kash_coam" modules must be installed in advance.
 
+# Registration logic
+
+Workflow should be the following from the point of view of mobile app:
+
+  a) you should show phone field in UI of mobile app;
+  b) then you submit data and check results, you should pay attention to all fields of result "success", "code", "psdata"; psdata may contain string in case of failure, and array in case of success; on every step "code" may have value 500 in case of internal logic error;
+  c) on this step you may get in "code" the following values, 301 - phone is absent, 302 - phone format is not valid, 200 - customer was found and OTP was sent by SMS, 303 - customer not found and names are absent in POST data (**this value 303 is particularly important for you, it means that customer not found**);
+  d) if you received 200 then you should render password field for customer, if you received 303 you should render full name field for customer, in all other cases you should render error message from "psdata";
+  e) on the next step you will send phone together either with full name or with password, and in result in "code" you may receive the following - all codes listed on the step C, plus 300 - in case of customer creation failure, 305 - if customer account was blocked ("Enabled" attribute was set to false in admin area), 306 - if customer not found in login logic (even if it was found earlier), 200 - in case of successful customer creation or in case of successful login.   
+
 # Differences between "optom" and "master" branches
 
 * Unused APIs were removed (they never should bew used in mobile application too):

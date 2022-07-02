@@ -54,7 +54,7 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 );
             } elseif (empty($firstName) || empty($lastName)) {
                 $psdata = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Auth');
-                $messageCode = 305;
+                $messageCode = 303;
             } else {
                 $cp = new CustomerPersister(
                     $this->context,
@@ -71,6 +71,9 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                     $customer->kash_full_name = Tools::getValue('kash_full_name');
                     $customer->kash_phone = $phone;
                     $customer->email = $phone . Customer::DUMMY_EMAIL_DOMAIN;
+                    if (Customer::customerExists($customer->email, true)) {
+                        $customer->email = KashUtils::generateRandomString() . Customer::DUMMY_EMAIL_DOMAIN;
+                    }
                     $customer->id_shop = (int)$this->context->shop->id;
 
                     $status = $cp->save($customer, KashUtils::generateRandomString());
