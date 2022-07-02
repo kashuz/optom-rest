@@ -12,7 +12,7 @@ trait KashHeadersTrait
             && ($language = new \Language($id))->id
         ) {
             $this->context->language = $language;
-            $this->context->locale = $language->locale;
+            $this->translator = $this->context->getTranslator();
         }
     }
 }
