@@ -77,9 +77,9 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
             $deliveryOptionsFinder
         );
 
-        $address->firstname = $session->getCustomer()->firstname;
-        $address->lastname = $session->getCustomer()->lastname;
-        $address->phone = Validate::cleanKoreanPhoneNumber($session->getCustomer()->kash_phone);
+        $address->firstname = Tools::getValue('firstname', $session->getCustomer()->firstname);
+        $address->lastname = Tools::getValue('lastname', $session->getCustomer()->lastname);
+        $address->phone = Tools::getValue('phone', Validate::cleanKoreanPhoneNumber($session->getCustomer()->kash_phone));
 
         $address->id_country = $country->id;
         $address->id_state = Tools::getValue('id_state');
