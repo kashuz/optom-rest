@@ -2,6 +2,16 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="admin161ifiue1" source-language="uz-UZ" target-language="uz-UZ" datatype="plaintext">
     <body>
+      <trans-unit id="d4e6d6c42bf3eb807b8778255a4ce415">
+        <source>Authentication failed</source>
+        <target>Aутентификация амалга ошмади</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b6983abc6e61614dd3dc5baf79b89786">
+        <source>Customer logged out successfully</source>
+        <target>Мижоз тизимдан муваффақиятли чиқди</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="cf702e46f2494e6aafa5fea0e261f4ec">
         <source>Phone is required</source>
         <target>Телефон рақамингизни киритинг</target>
@@ -17,19 +27,9 @@
         <target>Тўлиқ исм-шарифингиз талаб қилинади</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="b6983abc6e61614dd3dc5baf79b89786">
-        <source>Customer logged out successfully</source>
-        <target>Мижоз тизимдан муваффақиятли чиқди</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="b07c0ef72e1d8e83f4ad6d1ecff96380">
         <source>Your account isn't available at this time.</source>
         <target>Шахсий кабинетингиз ҳозирда мавжуд емас.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="d4e6d6c42bf3eb807b8778255a4ce415">
-        <source>Authentication failed</source>
-        <target>Aутентификация амалга ошмади</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="23449e6c6fb211fb8bf12eae126cf555">

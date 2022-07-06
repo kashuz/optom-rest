@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin161ifiue1" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="5647b2643c0b0f50b19ae34a215a7277">
+        <source>Invalid name format</source>
+        <target>Invalid name format</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2324a54dfd3849165694f01c41b1bf09">
+        <source>Full name is required</source>
+        <target>Full name is required</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="911e2a5cf14d531f69ef8a03815f8557">
+        <source>The phone is already used, please choose another one.</source>
+        <target>The phone is already used, please choose another one.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00589e3bb6d7bbb598f17fe9bfe70052">
+        <source>Invalid phone number</source>
+        <target>Invalid phone number</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cf702e46f2494e6aafa5fea0e261f4ec">
+        <source>Phone is required</source>
+        <target>Phone is required</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
