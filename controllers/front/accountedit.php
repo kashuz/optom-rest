@@ -21,23 +21,50 @@ class BinshopsrestAccounteditModuleFrontController extends AbstractAuthRESTContr
         $messageCode = 0;
         $success = true;
         list ($firstName, $lastName) = KashUtils::parseFullName(Tools::getValue('kash_full_name'));
+        $phone = Validate::cleanKoreanPhoneNumber(Tools::getValue('kash_phone'));
+        $password = Tools::getValue('password');
 
-        if (empty($firstName)) {
+        if (empty($phone)) {
+            $message = $this->trans("Phone is required", [], 'Modules.Binshopsrest.Accountedit');
+            $messageCode = 301;
             $success = false;
-            $message = "First name required";
-            $messageCode = 305;
-        } elseif (empty($lastName)) {
+        } elseif (!Validate::isKoreanPhoneNumber($phone)) {
+            $message = $this->trans("Invalid phone number", [], 'Modules.Binshopsrest.Accountedit');
+            $messageCode = 302;
             $success = false;
-            $message = "Last name required";
-            $messageCode = 306;
-        } elseif (!Validate::isCustomerName($firstName)){
+        } elseif (($customerId = Customer::customerExistsByPhone($phone))
+            && $customerId != $this->context->customer->id) {
+            $message = $this->trans('The phone is already used, please choose another one.', [], 'Modules.Binshopsrest.Accountedit');
+            $messageCode = 302;
             $success = false;
-            $message = "firstname bad format";
+        } elseif (empty($firstName) || empty($lastName)) {
+            $success = false;
+            $message = $this->trans("Full name is required", [], 'Modules.Binshopsrest.Accountedit');
+            $messageCode = 303;
+        } elseif (!Validate::isCustomerName($firstName) || !Validate::isCustomerName($lastName)){
+            $success = false;
+            $message = $this->trans("Invalid name format", [], 'Modules.Binshopsrest.Accountedit');
             $messageCode = 311;
-        } elseif (!Validate::isCustomerName($lastName)){
+        } elseif (!strlen($password)) {
+            $customer = new Customer($this->context->customer->id);
+            if ($customer->kash_phone !== $phone) {
+                $customer->newKashPhone = $phone;
+            }
+            $resultMessage = null;
+            $customer->sendOtpToPhone($resultMessage);
+            $messageCode = 200;
+            $psdata = array(
+                'is_otp_sent' => true,
+                'otp_repeat_interval' => Customer::OTP_REPEAT_INTERVAL,
+                'message' => $resultMessage,
+            );
+        } elseif (
+            !($customer = (new Customer())->getByEmail($this->context->customer->kash_phone, $password))
+            || $customer->id != $this->context->customer->id
+        ) {
             $success = false;
-            $message = "lastname bad format";
-            $messageCode = 312;
+            $message = $this->trans("Authentication failed", [], 'Modules.Binshopsrest.Auth');
+            $messageCode = 306;
         } else {
             try {
                 $cp = new CustomerPersister(
@@ -51,6 +78,7 @@ class BinshopsrestAccounteditModuleFrontController extends AbstractAuthRESTContr
                 $customer->firstname = $firstName;
                 $customer->lastname = $lastName;
                 $customer->kash_full_name = Tools::getValue('kash_full_name');
+                $customer->kash_phone = $phone;
 
                 $status = $cp->save(
                     $customer,
