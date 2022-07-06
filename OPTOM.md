@@ -56,6 +56,10 @@ If user is logging in in desktop browser then mobile session is kept alive, but 
 
 It is required to allow users to enter in UI passwords not less than 6 digits, or errors including word "email" in core PrestaShop logic will be generated.
 
+# Sorting of products in category
+
+It is done via usage of GET parameters "by" and "way". "by" may contain product attribute, "way" may contain "asc" or "desc" strings.
+
 # Localization and internationalization
 
 Use header Kash-Lang-Iso-Code with possible values "en", "uz", "ru" to change language of text results in cart, products list, and product details.
