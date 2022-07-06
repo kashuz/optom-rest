@@ -50,6 +50,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-categorytree' => [
+                'rule' => 'rest/categorytree',
+                'keywords' => [],
+                'controller' => 'categorytree',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-bootstrap' => [
                 'rule' => 'rest/bootstrap',
                 'keywords' => [],
