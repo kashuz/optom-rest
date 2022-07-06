@@ -79,7 +79,7 @@ abstract class AbstractProductListingRESTController extends ProductListingFrontC
             $query = new ProductSearchQuery();
             $query
                 ->setIdCategory(Tools::getValue('id_category'))
-                ->setSortOrder(new SortOrder('product', Tools::getProductsOrder('by'), Tools::getProductsOrder('way')));
+                ->setSortOrder(new SortOrder('product', Tools::getProductsOrder('by', Tools::getValue('by')), Tools::getProductsOrder('way', Tools::getValue('way'))));
         }
 
         // ...modules decide if they can handle it (first one that can is used)

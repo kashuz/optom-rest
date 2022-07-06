@@ -30,9 +30,10 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
 
     public function init()
     {
+        header('Content-Type: ' . "application/json");
+        $this->processKashHeaders();
         $this->performAuthenticationViaHeaders();
         if (!$this->context->customer->isLogged()) {
-            header('Content-Type: ' . "application/json");
             $this->ajaxRender(json_encode([
                 'code' => 410,
                 'success' => false,
@@ -470,8 +471,8 @@ class BinshopsrestWishlistModuleFrontController extends AbstractProductListingRE
         $query->setSortOrder(
             new SortOrder(
                 'product',
-                Tools::getProductsOrder('by'),
-                Tools::getProductsOrder('way')
+                Tools::getProductsOrder('by', Tools::getValue('by')),
+                Tools::getProductsOrder('way', Tools::getValue('way'))
             )
         );
 
