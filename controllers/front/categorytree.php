@@ -14,7 +14,7 @@ class BinshopsrestCategorytreeModuleFrontController extends AbstractRESTControll
             $this->context->link
         );
 
-        $categories = Category::getNestedCategories();
+        $categories = Category::getNestedCategories(null, $this->context->language->id);
         $this->setAttributes($categories);
 
         $this->ajaxRender(json_encode([
