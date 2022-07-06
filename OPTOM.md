@@ -60,6 +60,10 @@ It is required to allow users to enter in UI passwords not less than 6 digits, o
 
 It is done via usage of GET parameters "by" and "way". "by" may contain product attribute, "way" may contain "asc" or "desc" strings.
 
+# Customer account update
+
+On request with correct data OTP is sent to provided phone number. After that data must be resubmitted with OTP to perform saving.
+
 # Localization and internationalization
 
 Use header Kash-Lang-Iso-Code with possible values "en", "uz", "ru" to change language of text results in cart, products list, and product details.
