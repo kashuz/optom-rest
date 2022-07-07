@@ -4,12 +4,12 @@
     <body>
       <trans-unit id="5b6626614d0f8e306d58f30d5d237bd5">
         <source>Password Incorrect</source>
-        <target>Password Incorrect</target>
+        <target>Неверный пароль</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="df370ab95e3a9399b170f85d822a6dd9">
         <source>User updated successfully</source>
-        <target>User updated successfully</target>
+        <target>Пользователь успешно обновлен</target>
         <note>Line: </note>
       </trans-unit>
     </body>
