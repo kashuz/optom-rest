@@ -9,7 +9,12 @@ class BinshopsrestSimpleblogModuleFrontController extends AbstractRESTController
         $this->ajaxRender(json_encode([
             'code' => 200,
             'success' => true,
-            'psdata' => SimpleBlogPost::getAllAvailablePosts($this->context->language->id)
+            'psdata' => SimpleBlogPost::getPosts(
+                $this->context->language->id,
+                Tools::getValue('pageSize', 10),
+                null,
+                Tools::getValue('page', 0)
+            )
         ]));
         die;
     }
