@@ -53,7 +53,10 @@ trait AuthTrait
             if (!$this->context->cart) {
                 $this->context->cart = new Cart($cartId);
             }
+            $id_address_delivery = $this->context->cart->id_address_delivery;
             $this->context->updateCustomer($customer);
+            // they are reset in the previous method call
+            $this->restoreCartAddresses($id_address_delivery);
 
             Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);
 
@@ -81,5 +84,26 @@ trait AuthTrait
         }
 
         return is_array($psdata) && isset($psdata['customer_id']) && $psdata['customer_id'] && $messageCode == 200;
+    }
+
+    protected function restoreCartAddresses($id_address_delivery)
+    {
+        if (!$id_address_delivery) {
+            return;
+        }
+
+        $address = new Address($id_address_delivery);
+        if (
+            !$address->id
+            || $address->id_customer != $this->context->cart->id_customer
+        ) {
+            return;
+        }
+
+        $this->context->cart->id_address_delivery = $id_address_delivery;
+        $this->context->cart->id_address_invoice = $id_address_delivery;
+
+        $this->context->cart->save();
+        $this->context->cart->autosetProductAddress();
     }
 }
