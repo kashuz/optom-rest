@@ -59,6 +59,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-cms' => [
+                'rule' => 'rest/cms',
+                'keywords' => [],
+                'controller' => 'cms',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-simpleblog' => [
                 'rule' => 'rest/simpleblog',
                 'keywords' => [],
