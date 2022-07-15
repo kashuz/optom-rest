@@ -15,7 +15,6 @@ Workflow should be the following from the point of view of mobile app:
 # Differences between "optom" and "master" branches
 
 * Unused APIs were removed (they never should bew used in mobile application too):
-    * accountedit
     * addressform
     * carriers
     * emailsubscription
