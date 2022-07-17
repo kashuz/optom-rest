@@ -19,6 +19,19 @@ class BinshopsrestSetaddresscheckoutModuleFrontController extends AbstractAuthRE
     {
         $_POST = json_decode(Tools::file_get_contents('php://input'), true);
         if (Tools::getValue('id_address')) {
+            $address = new Address(Tools::getValue('id_address'));
+            if (
+                !$address->id
+                || $address->id_customer != $this->context->cart->id_customer
+            ) {
+                $this->ajaxRender(json_encode([
+                    'success' => false,
+                    'code' => 500,
+                    'psdata' => $this->trans("Failed to set checkout address.", [], 'Modules.Binshopsrest.Checkout')
+                ]));
+                die;
+            }
+
             $deliveryOptionsFinder = new DeliveryOptionsFinder(
                 $this->context,
                 $this->getTranslator(),
@@ -34,7 +47,7 @@ class BinshopsrestSetaddresscheckoutModuleFrontController extends AbstractAuthRE
             $session->setIdAddressInvoice(Tools::getValue('id_address'));
         } else {
             $this->ajaxRender(json_encode([
-                'success' => true,
+                'success' => false,
                 'code' => 301,
                 'psdata' => $this->trans("id_address-required", [], 'Modules.Binshopsrest.Checkout')
             ]));
