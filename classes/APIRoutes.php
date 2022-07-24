@@ -77,6 +77,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+            'module-binshopsrest-gdpr' => [
+                'rule' => 'rest/gdpr',
+                'keywords' => [],
+                'controller' => 'gdpr',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-bootstrap' => [
                 'rule' => 'rest/bootstrap',
                 'keywords' => [],
