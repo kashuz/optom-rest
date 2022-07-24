@@ -10,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
+require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashUtils.php';
 
 class BinshopsrestAccounteditModuleFrontController extends AbstractAuthRESTController
 {
