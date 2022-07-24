@@ -24,6 +24,7 @@ class BinshopsrestGdprModuleFrontController extends AbstractAuthRESTController
             $controller = new psgdprExportDataToCsvModuleFrontController();
             $controller->exportDataToCsv($this->context->customer->id);
         } elseif (Tools::getValue('type') === 'pdf') {
+            $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate, br';
             $this->startOutput();
             GDPRLog::addLog($this->context->customer->id, 'exportPdf', 0);
             $controller = new psgdprExportDataToPdfModuleFrontController();
