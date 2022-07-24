@@ -42,13 +42,24 @@ class BinshopsrestGdprModuleFrontController extends AbstractAuthRESTController
     protected function startOutput()
     {
         register_shutdown_function(function () {
+            $output = ob_get_clean();
+            if (false === strpos($output, '<!DOCTYPE html>')) {
+                $success = true;
+                $code = 200;
+                $message = 'Export has been successfully performed.';
+            } else {
+                $success = false;
+                $code = 500;
+                $message = 'Internal error in psgdpr module.';
+            }
+
             $this->ajaxRender(json_encode([
-                'success' => true,
-                'code' => 200,
+                'success' => $success,
+                'code' => $code,
                 'psdata' => [
-                    'file' => base64_encode(ob_get_clean()),
+                    'output' => base64_encode($output),
                 ],
-                'message' => 'Export has been successfully performed.'
+                'message' => $message,
             ]));
             die;
         });
