@@ -81,8 +81,10 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
             } elseif (Tools::getIsset('deleteAll')) {
                 foreach ($this->context->cart->getProducts(true) as $product) {
                     $this->id_product = $product['id_product'];
+                    $this->id_product_attribute = $product['id_product_attribute'];
                     $this->processDeleteProductInCart();
                     unset($this->id_product);
+                    unset($this->id_product_attribute);
                 }
             } elseif (CartRule::isFeatureActive()) {
                 if (Tools::getIsset('addDiscount')) {
