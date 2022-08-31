@@ -74,7 +74,7 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     'exchangeRate' => $exchangeRate,
                     'divider' => $divider,
                 ])
-            ], JSON_INVALID_UTF8_IGNORE));
+            ], JSON_INVALID_UTF8_SUBSTITUTE));
             die;
         } catch (CoamException $e) {
             $this->ajaxRender(json_encode([
