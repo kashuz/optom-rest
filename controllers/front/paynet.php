@@ -42,6 +42,13 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     $_POST['serviceId'] ?? null,
                     $_POST['phone'] ?? null
                 );
+            } elseif ($_POST['action'] === 'electricityAccountNumberValidation') {
+                $paynet->validateElectricityAccountNumber(
+                    $_POST['countryCode'] ?? null,
+                    $_POST['serviceId'] ?? null,
+                    $_POST['soato'] ?? null,
+                    $_POST['customer_code'] ?? null
+                );
             } elseif ($_POST['action'] === 'amountValidation') {
                 $amount = $_POST['amount'] ?? null;
                 $amountInLocalCurrency = $_POST['amountInLocalCurrency'] ?? null;
