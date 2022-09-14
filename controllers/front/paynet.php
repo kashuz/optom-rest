@@ -34,7 +34,18 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                         $paynet->addCustomProperties($service);
                     }
                     unset($service);
-                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services']);
+                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
+                    // temporary code to lock displaying grouped services in mobile application
+                    foreach ($psdata['services'] as $category => $services) {
+                        foreach ($services as $index => $service) {
+                            if (isset($service['services'])) {
+                                unset($psdata['services'][$category][$index]);
+                            }
+                        }
+                        if (empty($psdata['services'][$category])) {
+                            unset($psdata['services'][$category]);
+                        }
+                    }
                 }
             } elseif ($_POST['action'] === 'phoneValidation') {
                 $paynet->validatePhoneNumber(
