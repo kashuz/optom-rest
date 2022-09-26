@@ -36,7 +36,6 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     unset($service);
                     $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
                     // temporary code to lock displaying grouped services in mobile application
-                    /*
                     foreach ($psdata['services'] as $category => $services) {
                         foreach ($services as $index => $service) {
                             if (isset($service['services'])) {
@@ -47,7 +46,17 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                             unset($psdata['services'][$category]);
                         }
                     }
-                    */
+                }
+            } elseif ($_POST['action'] === 'servicesTest') {
+                $psdata['services'] = json_decode(\Configuration::get('KASH_PAYNET_SERVICES'), true);
+                if (!is_array($psdata['services'])) {
+                    $psdata['services'] = [];
+                } else {
+                    foreach ($psdata['services'] as &$service) {
+                        $paynet->addCustomProperties($service);
+                    }
+                    unset($service);
+                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
                 }
             } elseif ($_POST['action'] === 'phoneValidation') {
                 $paynet->validatePhoneNumber(
