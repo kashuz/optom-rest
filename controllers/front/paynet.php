@@ -47,7 +47,7 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                         }
                     }
                 }
-            } elseif ($_POST['action'] === 'servicesTest') {
+            } elseif ($_POST['action'] === 'services.v2') {
                 $psdata['services'] = json_decode(\Configuration::get('KASH_PAYNET_SERVICES'), true);
                 if (!is_array($psdata['services'])) {
                     $psdata['services'] = [];
@@ -58,6 +58,8 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     unset($service);
                     $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
                 }
+            } elseif ($_POST['action'] === 'getServicesRefreshDate') {
+                $psdata['servicesRefreshDate'] = \Configuration::get('KASH_PAYNET_SERVICES_REFRESH_DATETIME');
             } elseif ($_POST['action'] === 'phoneValidation') {
                 $paynet->validatePhoneNumber(
                     $_POST['countryCode'] ?? null,
