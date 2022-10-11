@@ -73,6 +73,11 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     $_POST['soato'] ?? null,
                     $_POST['customer_code'] ?? null
                 );
+            } elseif ($_POST['action'] === 'dynamicFieldsValidation') {
+                $paynet->validateDynamicFields(
+                    $_POST['serviceId'] ?? null,
+                    $_POST['dynamicFields'] ?? null
+                );
             } elseif ($_POST['action'] === 'amountValidation') {
                 $amount = $_POST['amount'] ?? null;
                 $amountInLocalCurrency = $_POST['amountInLocalCurrency'] ?? null;
