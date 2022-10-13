@@ -43,8 +43,23 @@ class BinshopsrestSetaddresscheckoutModuleFrontController extends AbstractAuthRE
                 $deliveryOptionsFinder
             );
 
-            $session->setIdAddressDelivery(Tools::getValue('id_address'));
-            $session->setIdAddressInvoice(Tools::getValue('id_address'));
+            $id_address_new = Tools::getValue('id_address');
+
+            $session->setIdAddressDelivery($id_address_new);
+            $session->setIdAddressInvoice($id_address_new);
+
+            // further, it is fix of unclear bug in Prestashop
+
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'cart_product`
+                SET `id_address_delivery` = ' . (int) $id_address_new . '
+                WHERE  `id_cart` = ' . (int) $this->context->cart->id;
+            Db::getInstance()->execute($sql);
+
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'customization`
+                SET `id_address_delivery` = ' . (int) $id_address_new . '
+                WHERE  `id_cart` = ' . (int) $this->context->cart->id;
+            Db::getInstance()->execute($sql);
+
         } else {
             $this->ajaxRender(json_encode([
                 'success' => false,
