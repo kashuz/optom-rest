@@ -57,14 +57,14 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
             ]));
             die;
         } else {
+            $product_lazy = $this->getTemplateVarProduct();
+            $productFull = $product_lazy->getProduct();
             //this is when you change an attribute, every time a request is sent to get the price and its discount
             if ((boolean)Tools::getValue('refresh', 0)) {
-                $product_lazy = $this->getTemplateVarProduct();
-                $product = $product_lazy->getProduct();
-                $product['groups'] = $this->assignAttributesGroups($product);
+                $productFull['groups'] = $this->assignAttributesGroups($productFull);
 
                 $this->ajaxRender(json_encode([
-                    'psdata' => $product,
+                    'psdata' => $productFull,
                     'code' => 200,
                     'success' => true
                 ]));
@@ -73,6 +73,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
 
             $product = $this->getProduct();
             $product['groups'] = $this->assignAttributesGroups($product);
+            $product['quantity_discounts'] = $productFull['quantity_discounts'] ?? [];
 
             $this->ajaxRender(json_encode([
                 'success' => true,
