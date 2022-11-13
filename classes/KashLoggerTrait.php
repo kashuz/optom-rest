@@ -3,7 +3,7 @@
 /**
  * Log table:
  *
- * CREATE TABLE kash_rest_log (id INT PRIMARY KEY AUTO_INCREMENT, class VARCHAR(255) NOT NULL, start_time FLOAT NOT NULL, total_time FLOAT NOT NULL, post MEDIUMTEXT NOT NULL, get MEDIUMTEXT NOT NULL);
+ * CREATE TABLE kash_rest_log (id INT PRIMARY KEY AUTO_INCREMENT, class VARCHAR(255) NOT NULL, logged_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, total_time FLOAT NOT NULL, post MEDIUMTEXT NOT NULL, get MEDIUMTEXT NOT NULL);
  */
 trait KashLoggerTrait
 {
@@ -11,12 +11,13 @@ trait KashLoggerTrait
 
     protected function startProfiling()
     {
-        $this->kashStartTime = microtime(true);
+        $this->kashStartTime = hrtime(true);
         register_shutdown_function(function () {
             // to run it at the end of list of all shutdown functions
             register_shutdown_function(function () {
                 try {
-                    $totalTime = microtime(true) - $this->kashStartTime;
+                    $totalTime = (hrtime(true) - $this->kashStartTime) / 1e+9;
+
                     $config = require _PS_MODULE_DIR_
                         . '/../app/config/parameters.php';
 
@@ -33,12 +34,12 @@ trait KashLoggerTrait
                         throw new Exception(mysqli_error($connection));
                     }
 
-                    $stmt = mysqli_prepare($connection, "INSERT INTO kash_rest_log (class, start_time, total_time, post, get) VALUES (?, ?, ?, ?, ?)");
+                    $stmt = mysqli_prepare($connection, "INSERT INTO kash_rest_log (class, total_time, post, get) VALUES (?, ?, ?, ?)");
                     if (!$stmt) {
                         throw new Exception(mysqli_error($connection));
                     }
 
-                    $class = basename(self::class);
+                    $class = basename(get_class($this));
                     $post = json_encode($_POST);
                     if ($post === false) {
                         throw new Exception(json_last_error_msg());
@@ -47,7 +48,7 @@ trait KashLoggerTrait
                     if ($get === false) {
                         throw new Exception(json_last_error_msg());
                     }
-                    if (!mysqli_stmt_bind_param($stmt, 'sddss', $class, $this->kashStartTime, $totalTime, $post, $get)) {
+                    if (!mysqli_stmt_bind_param($stmt, 'sdss', $class, $totalTime, $post, $get)) {
                         throw new Exception(mysqli_error($connection));
                     }
 
