@@ -25,6 +25,11 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
     public $auth = true;
     public $ssl = true;
 
+    protected function isPostLogged()
+    {
+        return false;
+    }
+
     public function init()
     {
         $this->startProfiling();

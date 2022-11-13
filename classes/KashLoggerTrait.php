@@ -9,6 +9,11 @@ trait KashLoggerTrait
 {
     protected $kashStartTime;
 
+    protected function isPostLogged()
+    {
+        return true;
+    }
+
     protected function startProfiling()
     {
         $this->kashStartTime = hrtime(true);
@@ -40,7 +45,7 @@ trait KashLoggerTrait
                     }
 
                     $class = basename(get_class($this));
-                    $post = json_encode($_POST);
+                    $post = $this->isPostLogged() ? json_encode($_POST) : json_encode('No data have been logged for security reasons.');
                     if ($post === false) {
                         throw new Exception(json_last_error_msg());
                     }

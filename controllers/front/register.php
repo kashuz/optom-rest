@@ -12,6 +12,11 @@ require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashUtils.php';
 
 class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
 {
+    protected function isPostLogged()
+    {
+        return false;
+    }
+
     protected function findCustomerByCredentials($phone, $password)
     {
         $customer = new Customer();
