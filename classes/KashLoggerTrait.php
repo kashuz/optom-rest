@@ -29,7 +29,7 @@ trait KashLoggerTrait
                     }
                     $stmt = mysqli_prepare($db, "INSERT INTO kash_rest_log (class, start_time, total_time, post, get) VALUES (?, ?, ?, ?, ?)");
                     if (!$stmt) {
-                        throw new Exception(mysqli_error());
+                        throw new Exception(mysqli_error($db));
                     }
                     $post = json_encode($_POST);
                     if ($post === false) {
@@ -40,10 +40,10 @@ trait KashLoggerTrait
                         throw new Exception(json_last_error_msg());
                     }
                     if (!mysqli_stmt_bind_param($stmt, basename(self::class), $this->kashStartTime, $totalTime, $post, $get)) {
-                        throw new Exception(mysqli_error());
+                        throw new Exception(mysqli_error($db));
                     }
                     if (!mysqli_stmt_execute($stmt)) {
-                        throw new Exception(mysqli_error());
+                        throw new Exception(mysqli_error($db));
                     }
                 } catch (Exception $e) {
                     error_log('[KashLoggerTrait] ' . $e->getMessage());
