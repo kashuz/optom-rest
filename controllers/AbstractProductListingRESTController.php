@@ -11,7 +11,7 @@
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
-require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashLoggerTrait.php';
 
 use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery;

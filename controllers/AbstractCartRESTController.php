@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
-require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashLoggerTrait.php';
 
 abstract class AbstractCartRESTController extends CartControllerCore
 {
