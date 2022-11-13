@@ -17,7 +17,8 @@ trait KashLoggerTrait
             register_shutdown_function(function () {
                 try {
                     $totalTime = microtime(true) - $this->kashStartTime;
-                    $config = require __DIR__ . '/../../../app/config/parameters.php';
+                    $config = require _PS_MODULE_DIR_
+                        . '/../app/config/parameters.php';
                     $db = mysqli_connect(
                         $config['parameters']['database_host'],
                         $config['parameters']['database_user'],
