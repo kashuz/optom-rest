@@ -19,17 +19,20 @@ trait KashLoggerTrait
                     $totalTime = microtime(true) - $this->kashStartTime;
                     $config = require _PS_MODULE_DIR_
                         . '/../app/config/parameters.php';
-                    $db = mysqli_connect(
+                    $connection = mysqli_connect(
                         $config['parameters']['database_host'],
                         $config['parameters']['database_user'],
                         $config['parameters']['database_password'],
                     );
-                    if (!$db) {
+                    if (!$connection) {
                         throw new Exception(mysqli_connect_error());
                     }
-                    $stmt = mysqli_prepare($db, "INSERT INTO kash_rest_log (class, start_time, total_time, post, get) VALUES (?, ?, ?, ?, ?)");
+                    if (!mysqli_select_db($connection, $config['parameters']['database_name'])) {
+                        throw new Exception(mysqli_error($connection));
+                    }
+                    $stmt = mysqli_prepare($connection, "INSERT INTO kash_rest_log (class, start_time, total_time, post, get) VALUES (?, ?, ?, ?, ?)");
                     if (!$stmt) {
-                        throw new Exception(mysqli_error($db));
+                        throw new Exception(mysqli_error($connection));
                     }
                     $post = json_encode($_POST);
                     if ($post === false) {
@@ -40,10 +43,10 @@ trait KashLoggerTrait
                         throw new Exception(json_last_error_msg());
                     }
                     if (!mysqli_stmt_bind_param($stmt, basename(self::class), $this->kashStartTime, $totalTime, $post, $get)) {
-                        throw new Exception(mysqli_error($db));
+                        throw new Exception(mysqli_error($connection));
                     }
                     if (!mysqli_stmt_execute($stmt)) {
-                        throw new Exception(mysqli_error($db));
+                        throw new Exception(mysqli_error($connection));
                     }
                 } catch (Exception $e) {
                     error_log('[KashLoggerTrait] ' . $e->getMessage());
