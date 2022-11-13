@@ -11,6 +11,7 @@
 
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
 
 use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery;
@@ -25,11 +26,14 @@ abstract class AbstractProductListingRESTController extends ProductListingFrontC
 {
     use RESTTrait;
     use KashHeadersTrait;
+    use KashLoggerTrait;
 
     protected $category;
 
     public function init()
     {
+        $this->startProfiling();
+
         $this->processKashHeaders();
 
         header('Content-Type: ' . "application/json");

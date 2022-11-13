@@ -12,12 +12,14 @@
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
 
 abstract class AbstractRESTController extends ModuleFrontController
 {
     use RESTTrait;
     use AuthTrait;
     use KashHeadersTrait;
+    use KashLoggerTrait;
 
     private $img1 = 'large';
     private $img2 = 'medium';
@@ -25,6 +27,8 @@ abstract class AbstractRESTController extends ModuleFrontController
 
     public function init()
     {
+        $this->startProfiling();
+
         $this->processKashHeaders();
 
         header('Content-Type: ' . "application/json");

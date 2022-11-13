@@ -3,15 +3,19 @@
 require_once dirname(__FILE__) . '/../classes/RESTTrait.php';
 require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
 
 abstract class AbstractCartRESTController extends CartControllerCore
 {
     use RESTTrait;
     use AuthTrait;
     use KashHeadersTrait;
+    use KashLoggerTrait;
 
     public function init()
     {
+        $this->startProfiling();
+
         header('Content-Type: ' . "application/json");
         $this->processKashHeaders();
         $this->performAuthenticationViaHeaders();
