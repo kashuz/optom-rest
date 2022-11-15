@@ -13,6 +13,7 @@
 require_once dirname(__FILE__) . '/../AbstractAuthRESTController.php';
 
 use PrestaShop\PrestaShop\Adapter\Presenter\Order\OrderPresenter;
+use modules\kashpaynet\Paynet;
 
 class BinshopsrestOrderHistoryModuleFrontController extends AbstractAuthRESTController
 {
@@ -45,7 +46,7 @@ class BinshopsrestOrderHistoryModuleFrontController extends AbstractAuthRESTCont
                     ]));
                     die;
                 } else {
-                    $order_to_display->kash_paynet_receipt_array = json_decode($order->kash_paynet_receipt, true);
+                    $order_to_display->kash_paynet_receipt_array = $order->kash_paynet_receipt ? Paynet::translateReceipt(json_decode($order->kash_paynet_receipt, true)) : null;
                     $this->ajaxRender(json_encode([
                         'success' => true,
                         'code' => 200,
