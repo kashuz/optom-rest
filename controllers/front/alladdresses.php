@@ -16,10 +16,8 @@ class BinshopsrestAlladdressesModuleFrontController extends AbstractAuthRESTCont
     protected function processGetRequest()
     {
         $customer = $this->context->customer;
-        $psdata = $customer->getSimpleAddresses(
-            $this->context->language->id,
-            true // no cache
-        );
+        Db::getInstance(_PS_USE_SQL_SLAVE_)->disableCache();
+        $psdata = $customer->getSimpleAddresses($this->context->language->id);
         foreach ($psdata as &$address) {
             $addressObject = new Address($address['id']);
             if (!empty($addressObject->kash_photo)) {
