@@ -10,17 +10,22 @@
  */
 
 require_once dirname(__FILE__) . '/AbstractRESTController.php';
+require_once dirname(__FILE__) . '/../classes/KashLoggerTrait.php';
 
 /**
  * Protected REST endpoints should extend this class
  */
 abstract class AbstractAuthRESTController extends AbstractRESTController
 {
+    use KashLoggerTrait;
+
     public $auth = true;
     public $ssl = true;
 
     public function init()
     {
+        $this->startProfiling();
+
         header('Content-Type: ' . "application/json");
         $this->processKashHeaders();
         $this->performAuthenticationViaHeaders();

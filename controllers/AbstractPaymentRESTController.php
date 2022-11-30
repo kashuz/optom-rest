@@ -9,6 +9,7 @@
 
 require_once dirname(__FILE__) . '/../classes/AuthTrait.php';
 require_once dirname(__FILE__) . '/../classes/KashHeadersTrait.php';
+require_once dirname(__FILE__) . '/../classes/KashLoggerTrait.php';
 
 use PrestaShop\PrestaShop\Adapter\Presenter\Order\OrderPresenter;
 
@@ -19,12 +20,20 @@ abstract class AbstractPaymentRESTController extends ModuleFrontController
 {
     use AuthTrait;
     use KashHeadersTrait;
+    use KashLoggerTrait;
 
     public $auth = true;
     public $ssl = true;
 
+    protected function isPostLogged()
+    {
+        return false;
+    }
+
     public function init()
     {
+        $this->startProfiling();
+
         header('Content-Type: ' . "application/json");
         $this->processKashHeaders();
         $this->performAuthenticationViaHeaders();

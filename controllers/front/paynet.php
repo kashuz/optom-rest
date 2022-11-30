@@ -34,13 +34,49 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                         $paynet->addCustomProperties($service);
                     }
                     unset($service);
-                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services']);
+                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
+                    // temporary code to lock displaying grouped services in mobile application
+                    foreach ($psdata['services'] as $category => $services) {
+                        foreach ($services as $index => $service) {
+                            if (isset($service['services'])) {
+                                unset($psdata['services'][$category][$index]);
+                            }
+                        }
+                        if (empty($psdata['services'][$category])) {
+                            unset($psdata['services'][$category]);
+                        }
+                    }
                 }
+            } elseif ($_POST['action'] === 'services.v2') {
+                $psdata['services'] = json_decode(\Configuration::get('KASH_PAYNET_SERVICES'), true);
+                if (!is_array($psdata['services'])) {
+                    $psdata['services'] = [];
+                } else {
+                    foreach ($psdata['services'] as &$service) {
+                        $paynet->addCustomProperties($service);
+                    }
+                    unset($service);
+                    $psdata['services'] = $paynet->groupAndSortServices($psdata['services'], true);
+                }
+            } elseif ($_POST['action'] === 'getServicesRefreshDate') {
+                $psdata['servicesRefreshDate'] = \Configuration::get('KASH_PAYNET_SERVICES_REFRESH_DATETIME');
             } elseif ($_POST['action'] === 'phoneValidation') {
                 $paynet->validatePhoneNumber(
                     $_POST['countryCode'] ?? null,
                     $_POST['serviceId'] ?? null,
                     $_POST['phone'] ?? null
+                );
+            } elseif ($_POST['action'] === 'electricityAccountNumberValidation') {
+                $paynet->validateElectricityAccountNumber(
+                    $_POST['countryCode'] ?? null,
+                    $_POST['serviceId'] ?? null,
+                    $_POST['soato'] ?? null,
+                    $_POST['customer_code'] ?? null
+                );
+            } elseif ($_POST['action'] === 'dynamicFieldsValidation') {
+                $paynet->validateDynamicFields(
+                    $_POST['serviceId'] ?? null,
+                    $_POST['dynamicFields'] ?? null
                 );
             } elseif ($_POST['action'] === 'amountValidation') {
                 $amount = $_POST['amount'] ?? null;
@@ -74,7 +110,7 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     'exchangeRate' => $exchangeRate,
                     'divider' => $divider,
                 ])
-            ]));
+            ], JSON_INVALID_UTF8_SUBSTITUTE));
             die;
         } catch (CoamException $e) {
             $this->ajaxRender(json_encode([

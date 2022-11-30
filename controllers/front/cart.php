@@ -10,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../AbstractCartRESTController.php';
+require_once dirname(__FILE__) . '/../../classes/KashProductDiscountsTrait.php';
 
 use PrestaShop\PrestaShop\Adapter\Presenter\Cart\CartPresenter;
 
@@ -18,6 +19,8 @@ use PrestaShop\PrestaShop\Adapter\Presenter\Cart\CartPresenter;
  */
 class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
 {
+    use KashProductDiscountsTrait;
+
     protected function processGetRequest()
     {
         $this->updateCart();
@@ -56,6 +59,7 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
             $products[$key]['formatted_discount_amount_to_display'] = $presented_cart['products'][$key]['discount_amount_to_display'];
             $products[$key]['formatted_discount_type'] = $presented_cart['products'][$key]['discount_type'];
             $products[$key]['formatted_discount_percentage'] = $presented_cart['products'][$key]['discount_percentage'];
+            $products[$key]['quantity_discounts'] = $this->getQuantityDiscounts($products[$key]['id_product'], $products[$key]['id_product_attribute']);
         }
 
         $presented_cart['products'] = $products;

@@ -88,6 +88,27 @@ class Binshopsrest extends Module
 
         $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
+        try {
+            $dir = _PS_MODULE_DIR_ . '/../../kash-logs-reports';
+            if (is_dir($dir)) {
+                $files = [
+                    $dir . '/report-rest-stat.php',
+                    $dir . '/report-mysql-stat.php',
+                ];
+                foreach ($files as $file) {
+                    if (!file_exists($file)) {
+                        continue;
+                    }
+                    ob_start();
+                    require $file;
+                    $content = ob_get_clean();
+                    $output .= nl2br($content);
+                }
+            }
+        } catch (Exception $e) {
+            error_log('[Kash-Logs-Reports] '. $e->getMessage());
+        }
+
         return $output;
     }
 
