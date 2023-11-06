@@ -32,6 +32,11 @@ class BinshopsrestAccountinfoModuleFrontController extends AbstractAuthRESTContr
         $country = $formatter->getCountry();
         $user->states = State::getStatesByIdCountry($country->id);
 
+        Db::getInstance()->disableCache();
+        // due to unknown reason getRow() and getValue() do not work
+        $result = Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'cart c WHERE c.`id_customer` = ' . (int) $user->id . ' ORDER BY c.`id_cart` DESC LIMIT 1');
+        $user->latest_cart_id = $result[0]['id_cart'] ?? null;
+
         $this->ajaxRender(json_encode([
             'code' => 200,
             'success' => true,
