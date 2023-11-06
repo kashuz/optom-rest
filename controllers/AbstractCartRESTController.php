@@ -19,19 +19,25 @@ abstract class AbstractCartRESTController extends CartControllerCore
         header('Content-Type: ' . "application/json");
         $this->processKashHeaders();
         $this->performAuthenticationViaHeaders();
-        if (!$this->context->customer->isLogged()) {
+        
+        /* if (!$this->context->customer->isLogged()) {
             $this->ajaxRender(json_encode([
                 'code' => 410,
                 'success' => false,
                 'message' => $this->trans('User Not Authenticated', [], 'Modules.Binshopsrest.Admin')
             ]));
             die;
-        }
+        } */
 
         $this->processKashHeaders();
 
         parent::init();
 
+        /* if(isset($_GET['test_suraj'])){
+            echo "<pre>";
+            var_dump($this->context->cart);
+            die;
+        } */
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 $this->processGetRequest();

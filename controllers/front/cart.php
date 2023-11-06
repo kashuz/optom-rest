@@ -69,7 +69,8 @@ class BinshopsrestCartModuleFrontController extends AbstractCartRESTController
             'success' => true,
             'message' => $this->trans('cart operation successfully done', [], 'Modules.Binshopsrest.Cart'),
             'psdata' => $presented_cart,
-            'errors' => $this->errors
+            'errors' => $this->errors,
+            'id_cart' => $this->context->cart->id
         ]));
         die;
     }

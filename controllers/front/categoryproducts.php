@@ -26,93 +26,101 @@ class BinshopsrestCategoryproductsModuleFrontController extends AbstractProductL
 {
     protected function processGetRequest()
     {
-        if ((int)Tools::getValue('id_category')){
-            $id_category = (int)Tools::getValue('id_category');
-        }elseif (Tools::getValue('slug')){
-            $sql = 'SELECT * FROM `' . _DB_PREFIX_ . "category_lang`
+//        $memcacheKey = 'Categoryproducts::processGetRequest_' . md5(serialize(Tools::getAllValues())) . '_' . md5(serialize($this->getKashHeaders()));
+//        $cache = Cache::getInstance();
+//        if (!$cache->exists($memcacheKey)) {
+            if ((int)Tools::getValue('id_category')){
+                $id_category = (int)Tools::getValue('id_category');
+            }elseif (Tools::getValue('slug')){
+                $sql = 'SELECT * FROM `' . _DB_PREFIX_ . "category_lang`
             WHERE link_rewrite = '" . Tools::getValue('slug') . "'";
-            $result = Db::getInstance()->executeS($sql);
+                $result = Db::getInstance()->executeS($sql);
 
-            if (empty($result)){
+                if (empty($result)){
+                    $this->ajaxRender(json_encode([
+                        'code' => 302,
+                        'success' => false,
+                        'message' => $this->trans('There is not a category with this slug', [], 'Modules.Binshopsrest.Category')
+                    ]));
+                    die;
+                }else{
+                    $this->id_category = $result[0]['id_category'];
+                    $id_category = $result[0]['id_category'];
+                    $_POST['id_category'] = $id_category;
+                }
+            }else{
                 $this->ajaxRender(json_encode([
-                    'code' => 302,
+                    'code' => 301,
                     'success' => false,
-                    'message' => $this->trans('There is not a category with this slug', [], 'Modules.Binshopsrest.Category')
+                    'message' => $this->trans('Id category or slug not specified', [], 'Modules.Binshopsrest.Category')
                 ]));
                 die;
-            }else{
-                $this->id_category = $result[0]['id_category'];
-                $id_category = $result[0]['id_category'];
-                $_POST['id_category'] = $id_category;
             }
-        }else{
-            $this->ajaxRender(json_encode([
-                'code' => 301,
-                'success' => false,
-                'message' => $this->trans('Id category or slug not specified', [], 'Modules.Binshopsrest.Category')
-            ]));
-            die;
-        }
 
-        $this->category = new Category(
-            $id_category,
-            $this->context->language->id
-        );
-
-        $variables = $this->getProductSearchVariables();
-        $productList = $variables['products'];
-        $retriever = new \PrestaShop\PrestaShop\Adapter\Image\ImageRetriever(
-            $this->context->link
-        );
-
-        $settings = $this->getProductPresentationSettings();
-
-        foreach ($productList as $key => $product) {
-            $populated_product = (new ProductAssembler($this->context))
-                ->assembleProduct($product);
-
-            $lazy_product = new RESTProductLazyArray(
-                $settings,
-                $populated_product,
-                $this->context->language,
-                new \PrestaShop\PrestaShop\Adapter\Product\PriceFormatter(),
-                $retriever,
-                $this->context->getTranslator()
+            $this->category = new Category(
+                $id_category,
+                $this->context->language->id
             );
 
-            $productList[$key] = $lazy_product->getProduct();
-        }
+            $variables = $this->getProductSearchVariables();
+            $productList = $variables['products'];
+            $retriever = new \PrestaShop\PrestaShop\Adapter\Image\ImageRetriever(
+                $this->context->link
+            );
 
-        $facets = array();
-        foreach ($variables['facets']['filters']->getFacets() as $facet) {
-            array_push($facets, $facet->toArray());
-        }
+            $settings = $this->getProductPresentationSettings();
 
-        $psdata = [
-            'description' => $this->category->description,
-            'active' => $this->category->active,
-            'images' => $this->getImage(
-                $this->category,
-                $this->category->id_image
-            ),
-            'label' => $variables['label'],
-            'products' => $productList,
-            'sort_orders' => $variables['sort_orders'],
-            'sort_selected' => $variables['sort_selected'],
-            'pagination' => $variables['pagination'],
-            'facets' => $facets
-        ];
+            foreach ($productList as $cacheKey => $product) {
+                $populated_product = (new ProductAssembler($this->context))
+                    ->assembleProduct($product);
 
-        if (Tools::getValue('with_category_tree')){
-            $this->context->cookie->last_visited_category = $id_category;
-            $categoryTreeModule = Module::getInstanceByName('ps_categorytree');
-            $categoryTreeVariables = $categoryTreeModule->getWidgetVariables();
-            $psdata['categories'] = $categoryTreeVariables['categories'];
-        }
+                $lazy_product = new RESTProductLazyArray(
+                    $settings,
+                    $populated_product,
+                    $this->context->language,
+                    new \PrestaShop\PrestaShop\Adapter\Product\PriceFormatter(),
+                    $retriever,
+                    $this->context->getTranslator()
+                );
+
+                $productList[$cacheKey] = $lazy_product->getProduct();
+            }
+
+            $facets = array();
+            foreach ($variables['facets']['filters']->getFacets() as $facet) {
+                array_push($facets, $facet->toArray());
+            }
+
+            $psdata = [
+                'description' => $this->category->description,
+                'active' => $this->category->active,
+                'images' => $this->getImage(
+                    $this->category,
+                    $this->category->id_image
+                ),
+                'label' => $variables['label'],
+                'products' => $productList,
+                'sort_orders' => $variables['sort_orders'],
+                'sort_selected' => $variables['sort_selected'],
+                'pagination' => $variables['pagination'],
+                'facets' => $facets
+            ];
+
+            if (Tools::getValue('with_category_tree')){
+                $this->context->cookie->last_visited_category = $id_category;
+                $categoryTreeModule = Module::getInstanceByName('ps_categorytree');
+                $categoryTreeVariables = $categoryTreeModule->getWidgetVariables();
+                $psdata['categories'] = $categoryTreeVariables['categories'];
+            }
+
+//            $cache->set($memcacheKey, $psdata);
+//        }
+
 
         $this->ajaxRender(json_encode([
             'code' => 200,
             'success' => true,
+//            'psdata' => $cache->get($memcacheKey)
             'psdata' => $psdata
         ]));
         die;
@@ -135,7 +143,7 @@ class BinshopsrestCategoryproductsModuleFrontController extends AbstractProductL
     }
 
     /**
-     * Gets the product search query for the controller.
+                             * Gets the product search query for the controller.
      * That is, the minimum contract with which search modules
      * must comply.
      *
@@ -164,4 +172,6 @@ class BinshopsrestCategoryproductsModuleFrontController extends AbstractProductL
             $this->category
         );
     }
+
+
 }

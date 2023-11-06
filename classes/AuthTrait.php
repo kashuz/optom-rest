@@ -53,6 +53,7 @@ trait AuthTrait
             if (!$this->context->cart) {
                 $this->context->cart = new Cart($cartId);
             }
+            
             $id_address_delivery = $this->context->cart->id_address_delivery;
             $this->context->updateCustomer($customer);
             // they are reset in the previous method call

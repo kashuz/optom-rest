@@ -24,6 +24,11 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         );
         $address->loadPhoto();
 
+        if(strpos($address->firstname,$address->lastname) === false){
+            $address->firstname.=' '.$address->lastname;
+            $address->lastname = '';
+        }
+
         $this->ajaxRender(json_encode([
             'success' => true,
             'code' => 200,
@@ -78,7 +83,8 @@ class BinshopsrestAddressModuleFrontController extends AbstractAuthRESTControlle
         );
 
         $address->firstname = Tools::getValue('firstname', $session->getCustomer()->firstname);
-        $address->lastname = Tools::getValue('lastname', $session->getCustomer()->lastname);
+        $address->lastname = Tools::getValue('lastname', ' ');
+
         $address->phone = Tools::getValue('phone', Validate::cleanKoreanPhoneNumber($session->getCustomer()->kash_phone));
 
         $address->id_country = $country->id;

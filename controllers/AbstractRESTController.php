@@ -32,6 +32,7 @@ abstract class AbstractRESTController extends ModuleFrontController
         $this->processKashHeaders();
 
         header('Content-Type: ' . "application/json");
+
         parent::init();
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -71,5 +72,17 @@ abstract class AbstractRESTController extends ModuleFrontController
         } else {
             return $this->img1 . $this->img3;
         }
+    }
+
+    public function getKashHeaders()
+    {
+        $kashHeaders = [];
+        foreach ($_SERVER as $header => $value) {
+            if (strpos($header, 'HTTP_KASH') === 0) {
+                $kashHeaders[$header] = $value;
+            }
+        }
+
+        return $kashHeaders;
     }
 }

@@ -9,38 +9,24 @@ use PrestaShop\PrestaShop\Adapter\Category\CategoryProductSearchProvider;
 use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery;
 use PrestaShop\PrestaShop\Core\Product\Search\SortOrder;
 
-class BinshopsrestCategorytreeModuleFrontController extends AbstractProductListingRESTController
+class BinshopsrestCategorytreenewModuleFrontController extends AbstractProductListingRESTController
 {
     protected $imageRetriever;
     protected $category;
 
     protected function processGetRequest()
     {
-//        $cacheKey = 'Categorytree::processGetRequest';
-//        $cache = Cache::getInstance();
-//        if (!$cache->exists($cacheKey)) {
-            $this->imageRetriever = new ImageRetriever(
-                $this->context->link
-            );
+        $this->imageRetriever = new ImageRetriever(
+            $this->context->link
+        );
 
-            $categories = Category::getNestedCategories(null, $this->context->language->id);
-
-            $_GET['by'] = 'date_add';
-            $_GET['way'] = 'desc';
-            $_GET['resultsPerPage'] = 15;
-            $_GET['page'] = 1;
-            $this->setAttributes($categories);
-
-//            $cache->set($cacheKey, $categories);
-//        }
-
-        $this->ajaxRender(json_encode([
-            'code' => 200,
-            'success' => true,
-//            'psdata' => $cache->get($cacheKey)
-            'psdata' => $categories
-        ]));
+		$caching_sql = 'SELECT `response_data_json` as response_data FROM `kash_categorytree_caching` WHERE `record_id` = "1" limit 1';
+        $caching_rs = Db::getInstance()->executeS($caching_sql);
+		foreach ($caching_rs as $caching_row) {
+			echo $caching_row['response_data'];
+		}
         die;
+
     }
 
     protected function setAttributes(&$categories)
@@ -49,7 +35,7 @@ class BinshopsrestCategorytreeModuleFrontController extends AbstractProductListi
             $this->category = new Category($category['id_category']);
 
             $category['images'] = $this->imageRetriever->getImage($this->category, $this->category->id_image);
-            $category['num_of_products'] = $this->category->getProducts(
+            /*$category['num_of_products'] = $this->category->getProducts(
                 $this->context->language->id,
                 1,
                 1,
@@ -58,7 +44,7 @@ class BinshopsrestCategorytreeModuleFrontController extends AbstractProductListi
                 true
             );
 
-            $category['products'] = $this->getProducts($category['id_category']);
+            $category['products'] = $this->getProducts($category['id_category']);*/
 
             if (!empty($category['children'])) {
                 $this->setAttributes($category['children']);

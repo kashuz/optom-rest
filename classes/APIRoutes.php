@@ -59,6 +59,15 @@ class APIRoutes
                     'module' => 'binshopsrest'
                 ]
             ],
+			'module-binshopsrest-categorytreenew' => [
+                'rule' => 'rest/categorytree-v2',
+                'keywords' => [],
+                'controller' => 'categorytreenew',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
             'module-binshopsrest-cms' => [
                 'rule' => 'rest/cms',
                 'keywords' => [],
@@ -126,6 +135,15 @@ class APIRoutes
                 'rule' => 'rest/cart',
                 'keywords' => [],
                 'controller' => 'cart',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-cartv2' => [
+                'rule' => 'rest/cartv2',
+                'keywords' => [],
+                'controller' => 'cartv2',
                 'params' => [
                     'fc' => 'module',
                     'module' => 'binshopsrest'
@@ -243,6 +261,51 @@ class APIRoutes
                 'rule' => 'rest/wishlist',
                 'keywords' => [],
                 'controller' => 'wishlist',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-usertoken' => [
+                'rule' => 'rest/usertoken',
+                'keywords' => [],
+                'controller' => 'usertoken',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-sellerdetail' => [
+                'rule' => 'rest/sellerdetail',
+                'keywords' => [],
+                'controller' => 'sellerdetail',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-productdetailv2' => [
+                'rule' => 'rest/productdetailv2',
+                'keywords' => [],
+                'controller' => 'productdetailv2',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-registerv2' => [
+                'rule' => 'rest/registerv2',
+                'keywords' => [],
+                'controller' => 'registerv2',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'binshopsrest'
+                ]
+            ],
+            'module-binshopsrest-sellerlist' => [
+                'rule' => 'rest/sellerlist',
+                'keywords' => [],
+                'controller' => 'sellerlist',
                 'params' => [
                     'fc' => 'module',
                     'module' => 'binshopsrest'

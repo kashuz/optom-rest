@@ -96,6 +96,15 @@ class BinshopsrestPaynetModuleFrontController extends AbstractAuthRESTController
                     $_POST['amount'] ?? null,
                     $_POST['amountInLocalCurrency'] ?? null
                 );
+            } elseif ($_POST['action'] === 'naturalGasConnectionValidation') {
+                $paynet->validateNaturalGasConnection(
+                    $_POST['countryCode'] ?? null,
+                    $_POST['serviceId'] ?? null,
+                    $_POST['dynamicFields']['region-utility-service-id'] ?? null,
+                    $_POST['dynamicFields']['code'] ?? null,
+                    $_POST['dynamicFields']['terminal_id'] ?? 4121518,
+                    $_POST['dynamicFields']['licshet'] ?? null
+                );
             } else {
                 throw new Exception('Unknown action.');
             }

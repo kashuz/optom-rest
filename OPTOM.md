@@ -102,20 +102,3 @@ To list only Paynet orders in order history, please, use "is_paynet" => 1 in req
 # Debugging and testing
 
 Please, see test.php script at https://github.com/kashuz/optom_app/tree/master/_kash-dev/temp/rest
-
-# Documenting and testing in Postman
-
-See all API endpoints in the file  ```/classes/APIRoutes.php```. Also, you may check the list of controller classes in the folder ```/controller/front```.
-
-To understand what methods are supported by each endpoint/controller do the following:
-
-  * see controller classes in the folder ```/controller/front``` and base controller classes in the folder ```/controller```;
-  * see there usage of such methods as processGetRequest(), processPostRequest(), processPutRequest(), and processDeleteRequest().
-
-To understand what methods are supported by each endpoint/controller do the following:
-
-  * see controller classes in the folder ```/controller/front``` and base controller classes in the folder ```/controller```;
-  * search there calls of Tools::getValue() method, in these calls you may see names of POST/GET parameters that must be passed; in 90%-99% of cases it will be completely enough;
-  * the problem of remaining part of cases is that some base controller classes (like AbstractCartRESTController) are extended from PrestaShop core classes, and to understand full set of accepted POST/GET parameters you may need a) to install good IDE (Phpstorm from Jetbrains, for example, b) download full copy of source code of the system from server, c) put code of this module into ```/modules``` folder of PrestaShop, d) and then by using code navigation features browse in parent classes of base controller classes to search there Tools::getValue() calls.
-
-  

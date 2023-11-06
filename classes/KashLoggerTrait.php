@@ -4,8 +4,6 @@
  * Log table:
  *
  * CREATE TABLE kash_rest_log (id INT PRIMARY KEY AUTO_INCREMENT, class VARCHAR(255) NOT NULL, logged_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, total_time FLOAT NOT NULL, post MEDIUMTEXT NOT NULL, get MEDIUMTEXT NOT NULL);
- *
- * CREATE INDEX idx_kash_rest_log ON kash_rest_log (logged_at);
  */
 trait KashLoggerTrait
 {

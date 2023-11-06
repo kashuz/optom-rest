@@ -10,7 +10,7 @@
 require_once dirname(__FILE__) . '/../AbstractRESTController.php';
 require_once _PS_MODULE_DIR_ . 'kash_checkout/classes/KashUtils.php';
 
-class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
+class BinshopsrestRegisterv2ModuleFrontController extends AbstractRESTController
 {
     protected function isPostLogged()
     {
@@ -53,6 +53,34 @@ class BinshopsrestRegisterModuleFrontController extends AbstractRESTController
                 $customer = new Customer($customerId);
                 $resultMessage = null;
                 $customer->sendOtpToPhone($resultMessage);
+                /* if(isset($_GET['test_suraj'])){
+                    
+                    if (Configuration::get('PS_CART_FOLLOWING') && (empty($this->cookie->id_cart) || Cart::getNbProducts($this->cookie->id_cart) == 0) && $idCart = (int) Cart::lastNoneOrderedCart($customerId)) {
+                        $cart = new Cart($idCart);
+                        $cart->secure_key = $customer->secure_key;
+                    }else{
+                        $cart = new Cart();
+                        $cart->id_lang = (int) $this->context->language->id;
+                        $cart->id_currency = (int) $this->context->cookie->id_currency;
+                        $cart->id_guest = (int) $this->context->cookie->id_guest;
+                        $cart->id_shop_group = (int) $this->context->shop->id_shop_group;
+                        $cart->id_shop = $this->context->shop->id;
+                        $idCarrier = (int) $this->context->cart->id_carrier;
+                        $cart->secure_key = $customer->secure_key;
+                        $cart->id_carrier = 0;
+                        $cart->id_customer = $customer->id;
+                        $cart->setDeliveryOption(null);
+                        $cart->updateAddressId($cart->id_address_delivery, (int) Address::getFirstCustomerAddressId((int) ($customer->id)));
+                        $cart->id_address_delivery = (int) Address::getFirstCustomerAddressId((int) ($customer->id));
+                        $cart->id_address_invoice = (int) Address::getFirstCustomerAddressId((int) ($customer->id));
+                    }
+                    if (isset($idCarrier) && $idCarrier) {
+                        $deliveryOption = [$this->context->cart->id_address_delivery => $idCarrier . ','];
+                        $cart->setDeliveryOption($deliveryOption);
+                    }
+                    $cart->save();
+                    $this->context->cart = $cart;
+                } */
                 $messageCode = 200;
                 $psdata = array(
                     'is_otp_sent' => true,

@@ -244,4 +244,16 @@ abstract class AbstractProductListingRESTController extends ProductListingFrontC
             'activeFilters' => $activeFilters
         ];
     }
+
+    public function getKashHeaders()
+    {
+        $kashHeaders = [];
+        foreach ($_SERVER as $header => $value) {
+            if (strpos($header, 'HTTP_KASH') === 0) {
+                $kashHeaders[$header] = $value;
+            }
+        }
+
+        return $kashHeaders;
+    }
 }

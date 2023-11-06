@@ -26,7 +26,7 @@ use PrestaShop\PrestaShop\Core\Product\ProductPresentationSettings;
 /**
  * This REST endpoint gets details of a product
  */
-class BinshopsrestProductdetailModuleFrontController extends AbstractRESTController
+class BinshopsrestProductdetailV2ModuleFrontController extends AbstractRESTController
 {
     use KashProductDiscountsTrait;
 
@@ -42,16 +42,14 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         }
 
         if (!(int)Tools::getValue('product_id', 0)) {
-            $this->ajaxRender(
-                json_encode([
-                    'code' => 301,
-                    'message' => $this->trans('product id not specified', [], 'Modules.Binshopsrest.Product')
-                ])
-            );
+            $this->ajaxRender(json_encode([
+                'code' => 301,
+                'message' => $this->trans('product id not specified', [], 'Modules.Binshopsrest.Product')
+            ]));
             die;
         }
 
-//        $cacheKey = 'Productdetail::processGetRequest_' . (int)$id_cart . '_' . Tools::getValue('product_id');
+//        $cacheKey = 'ProductdetailV2::processGetRequest_' . (int)$id_cart . '_' . Tools::getValue('product_id');
 //        $cache = Cache::getInstance();
 //        if (!$cache->exists($cacheKey)) {
             if (!is_null($id_cart)) {
@@ -70,12 +68,10 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
             );
 
             if (!Validate::isLoadedObject($this->product)) {
-                $this->ajaxRender(
-                    json_encode([
-                        'code' => 302,
-                        'message' => $this->trans('product not found', [], 'Modules.Binshopsrest.Product')
-                    ])
-                );
+                $this->ajaxRender(json_encode([
+                    'code' => 302,
+                    'message' => $this->trans('product not found', [], 'Modules.Binshopsrest.Product')
+                ]));
                 die;
             } else {
                 $product_lazy = $this->getTemplateVarProduct();
@@ -84,36 +80,32 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
                 if ((boolean)Tools::getValue('refresh', 0)) {
                     $productFull['groups'] = $this->assignAttributesGroups($productFull);
 
-                    $this->ajaxRender(
-                        json_encode([
-                            'psdata' => $productFull,
-                            'code' => 200,
-                            'success' => true
-                        ])
-                    );
+                    $this->ajaxRender(json_encode([
+                        'psdata' => $productFull,
+                        'code' => 200,
+                        'success' => true
+                    ]));
                     die;
                 }
-
 
                 $product = $this->getProduct();
                 $product['groups'] = $this->assignAttributesGroups($product);
                 $product['quantity_discounts'] = $productFull['quantity_discounts'] ?? [];
 
-                if (isset($productFull['quantity'])) {
+                if(isset($productFull['quantity'])){
                     $product['quantity'] = $productFull['quantity'];
                 }
 
 //                $cache->set($cacheKey, $product);
             }
 //        }
-        $this->ajaxRender(
-            json_encode([
-                'success' => true,
-                'code' => 200,
-//                'psdata' => $cache->get($cacheKey),
-                'psdata' => $product,
-            ])
-        );
+
+        $this->ajaxRender(json_encode([
+            'success' => true,
+            'code' => 200,
+//            'psdata' => $cache->get($cacheKey),
+            'psdata' => $product,
+        ]));
         die;
     }
 
@@ -124,6 +116,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
      */
     public function getProduct()
     {
+        
         $product = array();
         $product['id_product'] = $this->product->id;
         $product['name'] = $this->product->name;
@@ -133,6 +126,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         $product['on_sale_products'] = $this->product->on_sale;
         $product['quantity'] = $this->product->quantity;
         $product['minimal_quantity'] = $this->product->minimal_quantity;
+        $product['id_default_attribute'] = $this->product->cache_default_attribute;
         if ($this->product->out_of_stock == 1) {
             $product['allow_out_of_stock'] = "1";
         } elseif ($this->product->out_of_stock == 0) {
@@ -148,11 +142,13 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
 
 
         $priceDisplay = Product::getTaxCalculationMethod(0); //(int)$this->context->cookie->id_customer
+        
         if (!$priceDisplay || $priceDisplay == 2) {
             $price = $this->product->getPrice(true, false);
             $price_without_reduction = $this->product->getPriceWithoutReduct(false);
         } else {
-            $price = $this->product->getPrice(false, false);
+            /* $price = $this->product->getPrice(false, false); */
+            $price = $this->product->price;
             $price_without_reduction = $this->product->getPriceWithoutReduct(true);
         }
         if ($priceDisplay >= 0 && $priceDisplay <= 2) {
@@ -179,8 +175,8 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
                 $product['discount_float_price'] = $price;
             }
         } else {
-            $product['price'] = '';
-            $product['discount_price'] = '';
+            $product['price'] = $this->formatPrice($this->product->price);
+                            $product['discount_price'] = '';
             $product['discount_percentage'] = '';
         }
 
@@ -224,6 +220,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
             $index = 0;
             foreach ($attributes['groups'] as $grp_id => $grp) {
                 $options[$index]['id'] = $grp_id;
+                $options[$index]['option_type'] = $this->getOptionTypeById($grp_id); 
                 $options[$index]['title'] = $grp['name'];
                 if ($grp['group_type'] == 'color') {
                     $options[$index]['is_color_option'] = 1;
@@ -319,16 +316,66 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         $product['accessories'] = $this->getProductAccessories($presenter);
         $product['customization_fields'] = $this->getCustomizationFields();
         $product['pack_products'] = $this->getPackProducts($presenter);
-        $product['seller_info'] = array();
+        $product['seller_info'] = null;
+        $is_seller_product = false;
 
         //Add seller Information if Marketplace is installed and feature is enable
-        $product['seller_info'] = array();
+        if(Module::isEnabled('marketplace')){
+            include_once(_PS_MODULE_DIR_ . 'marketplace/marketplace.php');
+            $id_seller = Db::getInstance()->getValue('select id_seller from `'._DB_PREFIX_.'wk_mp_seller_product` where id_ps_product = '.$this->product->id);
+            if ($id_seller) {
+                $is_seller_product = true;
+                $seller = WkMpSeller::getSeller($id_seller,$this->context->language->id,true);
+                if ($seller['profile_image'] && file_exists(_PS_MODULE_DIR_ . 'marketplace/views/img/seller_img/' . $seller['profile_image'])) {
+                    $seller['seller_img_path'] = $this->context->shop->getBaseURL(true, true).'modules/marketplace/views/img/seller_img/' . $seller['profile_image'];
+                    $seller['seller_img_exist'] =  1;
+                } else {
+                    $seller['seller_img_path'] = $this->context->shop->getBaseURL(true, true).'modules/marketplace/views/img/seller_img/defaultimage.jpg';
+                }
+
+                $sellerBannerPath = WkMpSeller::getSellerBannerLink($seller);
+                if(!$sellerBannerPath){
+                    $sellerBannerPath = $this->context->shop->getBaseURL(true, true).'modules/marketplace/views/img/seller_img/defaultimage.jpg';
+                }else{
+                    $sellerBannerPath= $this->context->shop->getBaseURL(true, true).$sellerBannerPath;
+                }
+                $seller['seller_banner_path'] = $sellerBannerPath;
+
+                $sellerBannerPath = WkMpSeller::getShopBannerLink($seller);
+                if(!$sellerBannerPath){
+                    $sellerBannerPath = $this->context->shop->getBaseURL(true, true).'modules/marketplace/views/img/seller_img/defaultimage.jpg';
+                }else{
+                    $sellerBannerPath= $this->context->shop->getBaseURL(true, true).$sellerBannerPath;
+                }
+                $seller['seller_shop_banner_path'] = $sellerBannerPath;
+                
+                $shopImagePath = WkMpSeller::getShopImageLink($seller);
+                if(!$shopImagePath){
+                    $shopImagePath = $this->context->shop->getBaseURL(true, true).'modules/marketplace/views/img/seller_img/defaultimage.jpg';
+                }else{
+                    $shopImagePath=$this->context->shop->getBaseURL(true, true).$shopImagePath;
+                }
+                $seller['seller_shop_logo_path'] = $shopImagePath;
+                $product['seller_info'] = $seller;
+            }
+        }
+        $product['is_seller_product'] = $is_seller_product;
 
         $product['product_attachments_array'] = $this->getProductAttachmentURLs($this->product->id);
 
+        $product_categories = Product::getProductCategoriesFull($this->product->id,$this->context->lanuguage->id);
+        if(!empty($product_categories)){
+            foreach($product_categories as $key=>$category){
+                if($category['id_category'] == Configuration::get('PS_ROOT_CATEGORY')){
+                    unset($product_categories[$key]);
+                }
+            }
+        }
+        $product['product_categories'] = array_values($product_categories);
         $link = new Link();
         $url = $link->getProductLink($product);
         $product['product_url'] = $url;
+        $product['free_shipping'] = Product::isFreeShippingSelected($this->product->id);
 
         return $product;
     }
@@ -345,12 +392,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         $attachments = Product::getAttachmentsStatic((int)$this->context->language->id, $id_product);
         $count = 0;
         foreach ($attachments as $attachment) {
-            $final_attachment_data[$count]['download_link'] = $this->context->link->getPageLink(
-                'attachment',
-                true,
-                null,
-                "id_attachment=" . $attachment['id_attachment']
-            );
+            $final_attachment_data[$count]['download_link'] = $this->context->link->getPageLink('attachment', true, null, "id_attachment=" . $attachment['id_attachment']);
             $final_attachment_data[$count]['file_size'] = Tools::formatBytes($attachment['file_size'], 2);
             $final_attachment_data[$count]['description'] = $attachment['description'];
             $final_attachment_data[$count]['file_name'] = $attachment['file_name'];
@@ -517,13 +559,8 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
      *
      * @return array pick items information
      */
-    public function getPackProducts($presenter)
-    {
-        $pack_items = Pack::isPack($this->product->id) ? Pack::getItemTable(
-            $this->product->id,
-            $this->context->language->id,
-            true
-        ) : [];
+    public function getPackProducts($presenter){
+        $pack_items = Pack::isPack($this->product->id) ? Pack::getItemTable($this->product->id, $this->context->language->id, true) : [];
         $assembler = new ProductAssembler($this->context);
 
         $presentedPackItems = [];
@@ -555,12 +592,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
 //        $product['minimal_quantity'] = $this->getProductMinimalQuantity($product);
 //        $product['quantity_wanted'] = $this->getRequiredQuantity($product);
         $product['extraContent'] = $extraContentFinder->addParams(array('product' => $this->product))->present();
-        $product['ecotax'] = Tools::convertPrice(
-            (float)$product['ecotax'],
-            $this->context->currency,
-            true,
-            $this->context
-        );
+        $product['ecotax'] = Tools::convertPrice((float)$product['ecotax'], $this->context->currency, true, $this->context);
 
         $product_full = Product::getProductProperties($this->context->language->id, $product, $this->context);
 
@@ -586,36 +618,16 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         $id_shop = $this->context->shop->id;
 
 
-        $quantity_discounts = SpecificPrice::getQuantityDiscounts(
-            $id_product,
-            $id_shop,
-            $id_currency,
-            $id_country,
-            $id_group,
-            $id_product_attribute,
-            false,
-            (int)$this->context->customer->id
-        );
+        $quantity_discounts = SpecificPrice::getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group, $id_product_attribute, false, (int)$this->context->customer->id);
 
 
-        $tax = (float)$this->product->getTaxesRate(
-            new Address((int)$this->context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
-        );
+        $tax = (float)$this->product->getTaxesRate(new Address((int)$this->context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
 
-        $this->quantity_discounts = $this->formatQuantityDiscounts(
-            $quantity_discounts,
-            $product_price,
-            (float)$tax,
-            $this->product->ecotax
-        );
+        $this->quantity_discounts = $this->formatQuantityDiscounts($quantity_discounts, $product_price, (float)$tax, $this->product->ecotax);
 
 
-        $product_full['quantity_label'] = ($this->product->quantity > 1) ? $this->trans(
-            'Items',
-            array(),
-            'Shop.Theme.Catalog'
-        ) : $this->trans('Item', array(), 'Shop.Theme.Catalog');
+        $product_full['quantity_label'] = ($this->product->quantity > 1) ? $this->trans('Items', array(), 'Shop.Theme.Catalog') : $this->trans('Item', array(), 'Shop.Theme.Catalog');
         $product_full['quantity_discounts'] = $this->quantity_discounts;
 
         if ($product_full['unit_price_ratio'] > 0) {
@@ -790,14 +802,13 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         return $checkedIdProductAttribute;
     }
 
-    protected function getProductPresentationSettings()
-    {
+    protected function getProductPresentationSettings(){
         $settings = new ProductPresentationSettings();
 
         $settings->catalog_mode = Configuration::isCatalogMode();
-        $settings->catalog_mode_with_prices = (int)Configuration::get('PS_CATALOG_MODE_WITH_PRICES');
+        $settings->catalog_mode_with_prices = (int) Configuration::get('PS_CATALOG_MODE_WITH_PRICES');
         $settings->include_taxes = $this->taxConfiguration->includeTaxes();
-        $settings->allow_add_variant_to_cart_from_listing = (int)Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY');
+        $settings->allow_add_variant_to_cart_from_listing = (int) Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY');
         $settings->stock_management_enabled = Configuration::get('PS_STOCK_MANAGEMENT');
         $settings->showPrices = Configuration::showPrices();
         $settings->lastRemainingItems = Configuration::get('PS_LAST_QTIES');
@@ -817,15 +828,13 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
             $combination_prices_set = [];
             foreach ($attributes_groups as $k => $row) {
                 // Color management
-                if (isset($row['is_color_group']) && $row['is_color_group'] && (isset($row['attribute_color']) && $row['attribute_color']) || (file_exists(
-                        _PS_COL_IMG_DIR_ . $row['id_attribute'] . '.jpg'
-                    ))) {
+                if (isset($row['is_color_group']) && $row['is_color_group'] && (isset($row['attribute_color']) && $row['attribute_color']) || (file_exists(_PS_COL_IMG_DIR_ . $row['id_attribute'] . '.jpg'))) {
                     $colors[$row['id_attribute']]['value'] = $row['attribute_color'];
                     $colors[$row['id_attribute']]['name'] = $row['attribute_name'];
                     if (!isset($colors[$row['id_attribute']]['attributes_quantity'])) {
                         $colors[$row['id_attribute']]['attributes_quantity'] = 0;
                     }
-                    $colors[$row['id_attribute']]['attributes_quantity'] += (int)$row['quantity'];
+                    $colors[$row['id_attribute']]['attributes_quantity'] += (int) $row['quantity'];
                 }
                 if (!isset($groups[$row['id_attribute_group']])) {
                     $groups[$row['id_attribute_group']] = [
@@ -839,41 +848,25 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
                 $groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = [
                     'name' => $row['attribute_name'],
                     'html_color_code' => $row['attribute_color'],
-                    'texture' => (@filemtime(
-                        _PS_COL_IMG_DIR_ . $row['id_attribute'] . '.jpg'
-                    )) ? _THEME_COL_DIR_ . $row['id_attribute'] . '.jpg' : '',
+                    'texture' => (@filemtime(_PS_COL_IMG_DIR_ . $row['id_attribute'] . '.jpg')) ? _THEME_COL_DIR_ . $row['id_attribute'] . '.jpg' : '',
                     'selected' => (isset($product_for_template['attributes'][$row['id_attribute_group']]['id_attribute']) && $product_for_template['attributes'][$row['id_attribute_group']]['id_attribute'] == $row['id_attribute']) ? true : false,
                 ];
 
                 //$product.attributes.$id_attribute_group.id_attribute eq $id_attribute
                 if ($row['default_on'] && $groups[$row['id_attribute_group']]['default'] == -1) {
-                    $groups[$row['id_attribute_group']]['default'] = (int)$row['id_attribute'];
+                    $groups[$row['id_attribute_group']]['default'] = (int) $row['id_attribute'];
                 }
                 if (!isset($groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']])) {
                     $groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] = 0;
                 }
-                $groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] += (int)$row['quantity'];
+                $groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] += (int) $row['quantity'];
 
 
                 // Call getPriceStatic in order to set $combination_specific_price
-                if (!isset($combination_prices_set[(int)$row['id_product_attribute']])) {
+                if (!isset($combination_prices_set[(int) $row['id_product_attribute']])) {
                     $combination_specific_price = null;
-                    Product::getPriceStatic(
-                        (int)$this->product->id,
-                        false,
-                        $row['id_product_attribute'],
-                        6,
-                        null,
-                        false,
-                        true,
-                        1,
-                        false,
-                        null,
-                        null,
-                        null,
-                        $combination_specific_price
-                    );
-                    $combination_prices_set[(int)$row['id_product_attribute']] = true;
+                    Product::getPriceStatic((int) $this->product->id, false, $row['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $combination_specific_price);
+                    $combination_prices_set[(int) $row['id_product_attribute']] = true;
                 }
             }
 
@@ -888,10 +881,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
                     $query = 'SELECT pac.`id_product_attribute`
                         FROM `' . _DB_PREFIX_ . 'product_attribute_combination` pac
                         INNER JOIN `' . _DB_PREFIX_ . 'product_attribute` pa ON pa.id_product_attribute = pac.id_product_attribute
-                        WHERE id_product = ' . $this->product->id . ' AND id_attribute IN (' . implode(
-                            ',',
-                            array_map('intval', $current_selected_attributes)
-                        ) . ')
+                        WHERE id_product = ' . $this->product->id . ' AND id_attribute IN (' . implode(',', array_map('intval', $current_selected_attributes)) . ')
                         GROUP BY id_product_attribute
                         HAVING COUNT(id_product) = ' . count($current_selected_attributes);
                     if ($results = Db::getInstance()->executeS($query)) {
@@ -899,19 +889,14 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
                             $id_product_attributes[] = $row['id_product_attribute'];
                         }
                     }
-                    $id_attributes = Db::getInstance()->executeS(
-                        'SELECT `id_attribute` FROM `' . _DB_PREFIX_ . 'product_attribute_combination` pac2
+                    $id_attributes = Db::getInstance()->executeS('SELECT `id_attribute` FROM `' . _DB_PREFIX_ . 'product_attribute_combination` pac2
                         WHERE `id_product_attribute` IN (' . implode(',', array_map('intval', $id_product_attributes)) . ')
-                        AND id_attribute NOT IN (' . implode(
-                            ',',
-                            array_map('intval', $current_selected_attributes)
-                        ) . ')'
-                    );
+                        AND id_attribute NOT IN (' . implode(',', array_map('intval', $current_selected_attributes)) . ')');
                     foreach ($id_attributes as $k => $row) {
-                        $id_attributes[$k] = (int)$row['id_attribute'];
+                        $id_attributes[$k] = (int) $row['id_attribute'];
                     }
                     foreach ($group['attributes'] as $key => $attribute) {
-                        if (!in_array((int)$key, $id_attributes)) {
+                        if (!in_array((int) $key, $id_attributes)) {
                             unset(
                                 $group['attributes'][$key],
                                 $group['attributes_quantity'][$key]
@@ -938,9 +923,7 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
             }
 
             // wash attributes list (if some attributes are unavailables and if allowed to wash it)
-            if (!Product::isAvailableWhenOutOfStock($this->product->out_of_stock) && Configuration::get(
-                    'PS_DISP_UNAVAILABLE_ATTR'
-                ) == 0) {
+            if (!Product::isAvailableWhenOutOfStock($this->product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0) {
                 foreach ($groups as &$group) {
                     foreach ($group['attributes_quantity'] as $key => &$quantity) {
                         if ($quantity <= 0) {
@@ -960,5 +943,35 @@ class BinshopsrestProductdetailModuleFrontController extends AbstractRESTControl
         } else {
             return [];
         }
+    }
+
+    public function getOptionTypeById($id){
+        switch($id){
+            case 1:
+                $option_type = 'size';
+                break;
+            case 2:
+                $option_type = 'color';
+                break;
+            case 3:
+                $option_type = 'dimension';
+                break;
+            case 4:
+                $option_type = 'paper_type';
+                break;
+            case 5:
+                $option_type = 'taste';
+                break;
+            case 6:
+                $option_type = 'weight';
+                break;
+            case 7:
+                $option_type = 'nb_tea_bags';
+                break;
+            default:
+                $option_type = '';
+
+        }
+        return $option_type;
     }
 }
